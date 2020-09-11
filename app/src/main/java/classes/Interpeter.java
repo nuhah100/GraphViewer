@@ -41,30 +41,34 @@ public class Interpeter {
 
         if (isOccurs(exp,operators) == -1)
             return Double.parseDouble(exp);
-
-
+        //
+        // ----------------------------------------- MUST BE FROM LEFT TO RIGHT!!!!!!!!!!!!!!!!!!!!!!!! -----------------------------------------------
+        //
         exp = exp.replace("+-","-").trim().replaceAll("\\s+","");
 
-        for(int i = 0; i < operators.length(); i++)
-        {
-            char sign = operators.charAt(i);
-            while (exp.contains(operators.substring(i, i + 1)) ) {
-                int signPlace = exp.indexOf(sign);
-                String before = exp.substring(0, signPlace);
-                String after = exp.substring(signPlace + 1);
+        final String[] opOrder =new String[]{"^","*/","+-"};
 
-                int beforeI = isOccursLast(before, operators);
+        for(int i = 0; i < opOrder.length; i++)
+        {
+            String sign = opOrder[i];
+
+            while (isOneContains(exp, sign.toCharArray()) ) {
+                int signPlace = isOccurs(exp, sign.toCharArray());
+                String beforeRaw = exp.substring(0, signPlace);
+                String afterRaw = exp.substring(signPlace + 1);
+                String before = beforeRaw, after = afterRaw;
+
+                int beforeI = isOccursLast(beforeRaw, operators.toCharArray());
                 if(beforeI != -1)
                 {
-                    if(before.charAt(beforeI) == '-') // For Minus before number.
-                        beforeI--;
-                    before = before.substring(beforeI + 1);
-
+                    //if(beforeRaw.charAt(beforeI) == '-') // For Minus before number.
+                        //beforeI--;
+                    before = beforeRaw.substring(beforeI + 1);
                 }
 
-                int afterI = isOccurs(after, operators);
+                int afterI = isOccurs(afterRaw, operators.toCharArray());
                 if(afterI != -1)
-                    after = after.substring(0, afterI);
+                    after = afterRaw.substring(0, afterI);
 
                 switch (sign)
                 {
@@ -98,10 +102,10 @@ public class Interpeter {
                 }
                 StringBuilder temp = new StringBuilder();
                 if(beforeI != -1)
-                    temp.append(exp.substring(0,beforeI+1));
+                    temp.append(beforeRaw.substring(0,beforeI+1));
                 temp.append(res);
                 if(afterI != -1)
-                    temp.append(exp.substring(afterI+2));
+                    temp.append(afterRaw.substring(afterI));
                 exp = temp.toString();
                 System.out.println(exp);
             }
@@ -109,20 +113,30 @@ public class Interpeter {
         return Double.parseDouble(exp);
     }
 
-    private static int isOccurs(String str, CharSequence signs)
+    private boolean isOneContains(String exp, char[] arr) {
+        boolean isOne = false;
+
+        for (int i = 0; i < arr.length && !isOne; i++)
+            isOne = exp.indexOf(arr[i]) != -1;
+
+
+        return isOne;
+    }
+
+    private static int isOccurs(String str, char[] signs)
     {
         int isOccur = Integer.MAX_VALUE;
-        for (int j = 0; j < signs.length(); j++)
-            isOccur = Math.min(str.indexOf(signs.charAt(j)),isOccur);
+        for (int j = 0; j < signs.length && isOccur == Integer.MAX_VALUE; j++)
+            isOccur = Math.min(str.indexOf(signs[j]) == -1 ? Integer.MAX_VALUE : str.indexOf(signs[j]) ,isOccur);
 
         return isOccur == Integer.MAX_VALUE ? -1 : isOccur;
     }
-    private static int isOccursLast(String str, CharSequence signs)
+    private static int isOccursLast(String str, char[] signs)
     {
         int isOccur = -1;
 
-        for (int j = 0; j < signs.length(); j++)
-            isOccur = Math.max(str.lastIndexOf(signs.charAt(j)),isOccur);
+        for (int j = 0; j < signs.length && isOccur == -1; j++)
+            isOccur = Math.max(str.lastIndexOf(signs[j]),isOccur);
 
         return isOccur;
     }
