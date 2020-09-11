@@ -16,15 +16,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        in = new Interpeter();
-        Double d = in.proccesCode("5 + 5 - 3 + 2/2 + 3*2");
-        System.out.println(d);
         gp = (GraphView) findViewById(R.id.GraphView);
     }
 
-    public void ref(View view) {
+    //TODO add function transforming and showing.
 
-        gp.i++;
+    public void ref(View view) {
         gp.refresh();
     }
 }

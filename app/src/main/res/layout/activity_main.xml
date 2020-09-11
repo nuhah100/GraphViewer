@@ -13,19 +13,11 @@
 
          />
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
-        android:backgroundTint="#138DC6"
-        android:onClick="ref"
-        android:text="Raise"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <!--
+    TODO:
+    1. user input.
+    2. buttons.
+    -->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -12,22 +12,22 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
+import classes.Graph;
+import classes.Line;
+
 public class GraphView extends View {
+
+    Graph gp;
+
     Path GraphPath;
     Paint GraphPaint;
-    Paint AxixPaint;
+    Paint AxisPaint;
     Paint HelpLinePaint;
-    float MinX, MaxX;
-    float MinY, MaxY;
 
-    // DUBUG VARSSSSSSSSSSSS
-    int k = 0;
-
-    // Dirs
-    float x1, x2, y1, y2, dx, dy;
+    float x1, x2, y1, y2;
     private VelocityTracker mVelocityTracker = null;
-    public int i = 1;
-    double r;
+
+
     public GraphView(Context context) {
         super(context);
 
@@ -53,11 +53,7 @@ public class GraphView extends View {
     }
 
     private void init(@Nullable AttributeSet attrs) {
-        MinX = -10;
-        MaxX = 10;
-
-        MinY = Function(0) - 20;
-        MaxY = Function(MaxX) + 20;
+        gp = new Graph();
 
         GraphPaint = new Paint();
 
@@ -67,13 +63,13 @@ public class GraphView extends View {
         GraphPaint.setStrokeJoin(Paint.Join.ROUND);
         GraphPaint.setStrokeWidth(5f);
 
-        AxixPaint = new Paint();
+        AxisPaint = new Paint();
 
-        AxixPaint.setAntiAlias(true);
-        AxixPaint.setColor(Color.DKGRAY);
-        AxixPaint.setStyle(Paint.Style.STROKE);
-        AxixPaint.setStrokeJoin(Paint.Join.ROUND);
-        AxixPaint.setStrokeWidth(4f);
+        AxisPaint.setAntiAlias(true);
+        AxisPaint.setColor(Color.DKGRAY);
+        AxisPaint.setStyle(Paint.Style.STROKE);
+        AxisPaint.setStrokeJoin(Paint.Join.ROUND);
+        AxisPaint.setStrokeWidth(4f);
 
         HelpLinePaint = new Paint();
 
@@ -91,65 +87,40 @@ public class GraphView extends View {
         // MUST DO!!!!!!!!!!!!!!!!!!!!!!
         // OPTIMIZE RUNTIME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-/*
-        double spaceX, spaceY;
-        spaceX = Math.abs(MaxX - MinX)/10;
-        spaceY = Math.abs(MaxY - MinY)/10;
-        for (int i = 0; i <= 11; i++)
-        {
-            canvas.drawLine(
-                    0,
-                    getHeight()/12 * i,
-                    getWidth(),
-                    getHeight()/12 * i,
-                    HelpLinePaint
-            ); // X Line
-            canvas.drawLine(
-                    getWidth()/12 * i,
-                    0,
-                    getWidth()/12 * i,
-                    getHeight(),
-                    HelpLinePaint
-            ); // Y Line
-        }
+        // Set the according canvas.
+        gp.canvas = canvas;
 
-*/
+        Line<Float> xAxis, yAxis;
+        xAxis = gp.getXAxis();
+        yAxis = gp.getYAxis();
 
-        // Draw Axix Lines
+        // Draw Axis Lines
         canvas.drawLine(
-                0,
-                Remap(0, MinY,MaxY, getHeight(),0),
-                getWidth(),
-                Remap(0, MinY,MaxY, getHeight(),0),
-                AxixPaint
-        ); // X Axix
+                xAxis.x1,
+                xAxis.y1,
+                xAxis.x2,
+                xAxis.y2,
+                AxisPaint
+        ); // X Axis
         canvas.drawLine(
-                Remap(0, MinX, MaxX, 0, getWidth()),
-                0,
-                Remap(0, MinX, MaxX, 0, getWidth()),
-                getHeight(),
-                AxixPaint
-        ); // Y Axix
+                yAxis.x1,
+                yAxis.y1,
+                yAxis.x2,
+                yAxis.y2,
+                AxisPaint
+        ); // Y Axis
 
-        GraphPath = new Path();
-
-        for(int i = 0; i <= canvas.getWidth(); i++)
-        {
-            float x = Remap(i,0,canvas.getWidth(), MinX, MaxX);
-            float y = Function(x);
-            float j = Remap(y,MinY,MaxY, canvas.getHeight() ,0);
-            if(i == 0)
-                GraphPath.moveTo(i,j);
-            else
-                GraphPath.lineTo(i,j);
-            //GraphPath.addCircle(i,j,2.5f, Path.Direction.CW);
-        }
+        // Render Graph.
+        GraphPath = gp.render();
         canvas.drawPath(GraphPath, GraphPaint);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
+        if(gp.canvas == null)
+            return false;
+
         float amount = .2f;
         int pointerId = event.getPointerId(event.getActionIndex());
         switch(event.getAction()) {
@@ -164,68 +135,23 @@ public class GraphView extends View {
                 } else {
 
                     // Reset the velocity tracker back to its initial state.
-                    mVelocityTracker.clear();
+                    //mVelocityTracker.clear();
                 }
-                mVelocityTracker.addMovement(event);
+                //mVelocityTracker.addMovement(event);
                 break;
             case (MotionEvent.ACTION_MOVE): {
-                float velX, velY;
-                mVelocityTracker.addMovement(event);
-                mVelocityTracker.computeCurrentVelocity(1000);
-                //velX = getXVelocity(mVelocityTracker,
-                //     pointerId);
-                //velY = getYVelocity(mVelocityTracker,
-                //       pointerId);
+                //mVelocityTracker.addMovement(event);
+                //mVelocityTracker.computeCurrentVelocity(1000);
 
-                if(k  == 1)
-                    break;
 
                 // Use this for after processing event.getDownTime()
                 x2 = event.getX();
                 y2 = event.getY();
-                dx = x2 - x1;
-                dy = y2 - y1;
 
+                // Move values in graph.
+                gp.touchMove(x1,y1,x2,y2);
 
-                velX = Remap(x2, 0 , getWidth(), MinX, MaxX) - Remap(x1, 0 , getWidth(),MinX, MaxX);
-                velY = Remap(y2, getHeight(), 0, MinY, MaxY) - Remap(y1, getHeight(), 0, MinY, MaxY);
-
-
-
-                if(dx != 0 )//&& MaxX + velX  < 60 && MinX + velX > -60)
-                {
-                    MaxX -= velX ;
-                    MinX -= velX;
-                }
-                if(dy != 0)// && MaxY + velY  < 60 && MinY + velY > -60)
-                {
-                    MaxY -= velY;
-                    MinY -= velY;
-                }
-                System.out.println("X: " +MaxX +" " + MinX);
-                System.out.println("Y: " + MaxY +" " + MinY);
-                if (dx > 0) {
-
-                    //MaxX -= amount;
-                    //MinX -= amount;
-                    System.out.println("Right");
-                } // Right
-                else {
-                    //MaxX += amount;
-                    //MinX += amount;
-                    System.out.println("Left");
-                } // Left
-                if (dy > 0) {
-                   // MaxY += amount;
-                    //MinY += amount;
-                    System.out.println("Down");
-                } // Down
-                else {
-                    //MaxY -= amount;
-                    //MinY -= amount;
-                    System.out.println("Up");
-                } // Up*/
-
+                // Save the current.
                 x1 = x2;
                 y1 = y2;
 
@@ -233,7 +159,6 @@ public class GraphView extends View {
             }
             case (MotionEvent.ACTION_UP): {
                 // Continue motion
-                k  = 0;
                 break;
             }
             case MotionEvent.ACTION_CANCEL: {
@@ -243,31 +168,14 @@ public class GraphView extends View {
             }
         }
 
-
-        invalidate();
+        refresh();
         return true;
     }
 
 
-
-
-    private float Function(float x)
-    {
-        return (float) Math.pow(x, i);//2);
-    }
-
-    private float FunctionN(float x)
-    {
-        return (float)x*2;
-    }
-
-    public static float Remap (float value, float from1, float to1, float from2, float to2) {
-        return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
-    }
-
     public void refresh()
     {
-        //GraphPath = new Path();
+       //GraphPath = new Path();
         invalidate();
     }
 }
