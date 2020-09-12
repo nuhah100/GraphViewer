@@ -14,6 +14,7 @@ public class Graph {
 
     private Interpeter in = new Interpeter();
 
+
     public Graph()
     {
         MinX = -10;
@@ -25,6 +26,7 @@ public class Graph {
         //function
         //in ;
     }
+
 
 
     public Path render()
@@ -50,7 +52,7 @@ public class Graph {
         MinY += vel;
         MaxY += vel;
 
-        System.out.println("Y: " + MinY + " " + MaxY);
+        //System.out.println("Y: " + MinY + " " + MaxY);
     }
 
     public void moveHorizontally(double vel)
@@ -58,7 +60,7 @@ public class Graph {
         MinX += vel;
         MaxX += vel;
 
-        System.out.println("X: " + MinX + " " + MaxX);
+       // System.out.println("X: " + MinX + " " + MaxX);
     }
 
     public Line<Float> getXAxis()
@@ -86,7 +88,7 @@ public class Graph {
         // Need to do function that user input.
         //return (float) Math.pow(x, 2);
         String exp = function.replace("x",String.format("%.3f",x));
-        System.out.println(exp);
+       // System.out.println(exp);
         return (float) in.calculate(exp);
     }
 

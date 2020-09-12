@@ -8,6 +8,10 @@ public class Interpeter {
     // Replacement for sign '-' which is not operator.
     final String subReplace;
 
+    static {
+        System.loadLibrary("native-lib");
+    }
+
 
 
     String func;
@@ -29,7 +33,7 @@ public class Interpeter {
                 .replaceAll("\\s+","")
                 .replaceAll("((?=[-+*^/])[-])([-]{0})",subReplace);
                 ;
-        System.out.println(exp);
+        //System.out.println(exp);
         double res;
 
         while(exp.contains("(") || exp.contains(")"))
