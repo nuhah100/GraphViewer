@@ -178,4 +178,8 @@ public class GraphView extends View {
        //GraphPath = new Path();
         invalidate();
     }
+
+    public void updateFunc(String f) {
+        gp.updateFunc(f);
+    }
 }

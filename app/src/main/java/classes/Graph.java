@@ -10,6 +10,10 @@ public class Graph {
 
     public Canvas canvas;
 
+    private String function= "x^3+x^2";
+
+    private Interpeter in = new Interpeter();
+
     public Graph()
     {
         MinX = -10;
@@ -17,6 +21,9 @@ public class Graph {
 
         MinY = function(0) - 20;
         MaxY = function(MaxX) + 20;
+
+        //function
+        //in ;
     }
 
 
@@ -77,7 +84,10 @@ public class Graph {
     private float function(float x)
     {
         // Need to do function that user input.
-        return (float) Math.pow(x, 2);
+        //return (float) Math.pow(x, 2);
+        String exp = function.replace("x",String.format("%.3f",x));
+        System.out.println(exp);
+        return (float) in.calculate(exp);
     }
 
 
@@ -98,6 +108,10 @@ public class Graph {
             moveHorizontally(-velX);
         if(dy != 0)// && MaxY + velY  < 60 && MinY + velY > -60)
             moveVertically(-velY);
+    }
+
+    public void updateFunc(String f) {
+        function = f.toLowerCase();
     }
 }
 
