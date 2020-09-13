@@ -116,7 +116,7 @@ public class GraphView extends View {
 
         long start = System.currentTimeMillis();
         GraphPath = gp.render();
-        long elapsedTime = System.nanoTime() - start;
+        long elapsedTime = System.currentTimeMillis() - start;
         System.out.println("Time that takes: " +(elapsedTime/1000F));
         canvas.drawPath(GraphPath, GraphPaint);
     }

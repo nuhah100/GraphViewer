@@ -8,9 +8,6 @@ public class Interpeter {
     // Replacement for sign '-' which is not operator.
     final String subReplace;
 
-    static {
-        System.loadLibrary("native-lib");
-    }
 
 
 

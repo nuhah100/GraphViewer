@@ -10,10 +10,14 @@ public class Graph {
 
     public Canvas canvas;
 
-    private String function= "x^3+x^2";
+    private String function= "x^2";
 
     private Interpeter in = new Interpeter();
 
+    public native double stringFromJNI(String func);
+    static {
+        System.loadLibrary("native-lib");
+    }
 
     public Graph()
     {
@@ -90,6 +94,7 @@ public class Graph {
         String exp = function.replace("x",String.format("%.3f",x));
        // System.out.println(exp);
         return (float) in.calculate(exp);
+        //return (float) stringFromJNI(exp);
     }
 
 

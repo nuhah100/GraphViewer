@@ -20,14 +20,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         gp = (GraphView) findViewById(R.id.GraphView);
         t = (TextInputEditText) findViewById(R.id.txtFunc);
-
-        //System.out.println(stringFromJNI());
+        //double d = stringFromJNI("3^2 + 3");
+        //System.out.println(d);
     }
 
-    public native String stringFromJNI();
-    static {
-        System.loadLibrary("native-lib");
-    }
+
 
 
     //TODO add function transforming and showing.
