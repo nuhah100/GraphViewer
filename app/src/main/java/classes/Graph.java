@@ -10,17 +10,22 @@ public class Graph {
 
     public Canvas canvas;
 
-    private String function= "x^2";
+    private String function;
 
     private Interpeter in = new Interpeter();
-
-    public native double stringFromJNI(String func);
+    /*
+       public native double CalculateExp(String func);
+     public native int Alloc();
+       public native int Free();
     static {
         System.loadLibrary("native-lib");
     }
+    */
 
     public Graph()
     {
+        function = "x^2";
+
         MinX = -10;
         MaxX = 10;
 
@@ -35,9 +40,10 @@ public class Graph {
 
     public Path render()
     {
+        //Alloc();
         Path graph = new Path();
 
-        for(int i = 0; i <= canvas.getWidth(); i++)
+        for(int i = 0; i <= canvas.getWidth(); i+=4)
         {
             float x = remap(i,0,canvas.getWidth(), MinX, MaxX);
             float y = function(x);
@@ -48,6 +54,7 @@ public class Graph {
                 graph.lineTo(i,j);
             //GraphPath.addCircle(i,j,2.5f, Path.Direction.CW);
         }
+        //Free();
         return graph;
     }
 
@@ -94,7 +101,7 @@ public class Graph {
         String exp = function.replace("x",String.format("%.3f",x));
        // System.out.println(exp);
         return (float) in.calculate(exp);
-        //return (float) stringFromJNI(exp);
+        //return (float) CalculateExp(exp);
     }
 
 
@@ -117,8 +124,9 @@ public class Graph {
             moveVertically(-velY);
     }
 
-    public void updateFunc(String f) {
-        function = f.toLowerCase();
+    public void updateFunc(String f)
+    {
+        function = f.toLowerCase().trim();
     }
 }
 

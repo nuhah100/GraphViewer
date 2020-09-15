@@ -124,6 +124,7 @@ public class GraphView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
+
         if(gp.canvas == null)
             return false;
 

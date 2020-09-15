@@ -15,6 +15,8 @@
 
 #define OpOrderLen 3
 
+
+// TODO ADD MULTITHREADING!!!!
 class Interpeter
 {
     std::string operators = "^*/+-";
@@ -85,12 +87,13 @@ private:
                 // Get actual sign.
                 char sign = exp[signPlace];
 
+
                 // Get string before the sign.
-                std::string beforeRaw = exp.substr(0,signPlace);
+                std::string_view beforeRaw(exp.c_str(), signPlace);
                 // Get string after the sign.
-                std::string afterRaw = exp.substr(signPlace + 1);
+                std::string_view afterRaw(exp.c_str() + signPlace + 1);
                 // So we can change them.
-                std::string before = beforeRaw, after = afterRaw;
+                std::string_view before = beforeRaw, after = afterRaw;
 
                 // Check if there is sign before our sign.
                 size_t beforeI = isOccursLast(beforeRaw, operators.c_str());
@@ -115,55 +118,50 @@ private:
                 }
 
                 // Return signs to original
-                before = std::regex_replace(before,std::regex(subReplace), minusSign);
-                after = std::regex_replace(after, std::regex(subReplace), minusSign);
+                std::string beforeCal = std::regex_replace(std::string(before),std::regex(subReplace), minusSign);
+                std::string afterCal = std::regex_replace(std::string(after), std::regex(subReplace), minusSign);
                 //std::regex_replace(std::back_inserter(before), before.begin(), before.end(), subReplace, "-");
                 //std::regex_replace(std::back_inserter(after), after.begin(), after.end(), subReplace, "-");
 
                 // Only if there is before and after, and not "+2".
-                if (after != "" && before != "") {
+                if (afterCal.size() > 0 && beforeCal.size() > 0) {
                     //Check What is the sign.
                     switch (sign) {
                     case '^': {
-                        res = pow(std::stod(before.c_str()), std::stod(after.c_str()));
+                        res = pow(std::stod(std::string(beforeCal)), std::stod(std::string(afterCal)));
                         break;
                     }
                     case '*': {
-                        res = std::stod(before.c_str()) * std::stod(after.c_str());
+                        res = std::stod(std::string(beforeCal)) * std::stod(std::string(afterCal));
                         break;
                     }
                     case '/': {
-                        if (std::stod(after.c_str()) == 0)
+                        if (std::stod(std::string(afterCal)) == 0)
                             throw new std::exception;
-                        res = std::stod(before.c_str()) / std::stod(after.c_str());
+                        res = std::stod(std::string(beforeCal)) / std::stod(std::string(afterCal));
                         break;
                     }
                     case '+': {
-                        res = std::stod(before.c_str()) + std::stod(after.c_str());
+                        res = std::stod(std::string(beforeCal)) + std::stod(std::string(afterCal));
                         break;
                     }
                     case '-': {
-                        res = std::stod(before) - std::stod(after.c_str());
+                        res = std::stod(std::string(beforeCal)) - std::stod(std::string(afterCal));
                         break;
                     }
                     } // Calculate.
-                }
-                else
-                {
-                    // Parse the exp.
-                    res = std::stod((before + after).c_str());
                 }
                 std::string resStr = std::to_string(res);
                 //std::regex_replace(std::back_inserter(resStr), resStr.begin(), resStr.end(), "((?=[-+*^/])[-])([-]{0})", subReplace.c_str());
                 resStr = std::regex_replace(resStr, signGet, subReplace.c_str());
                 // For string addition.
                 std::string temp;
-                // If there is string before the sign.
+                // If there is string beforeCal the sign.
                 if (beforeI != std::string::npos)
                     temp.append(beforeRaw.substr(0,beforeI));
                 // Added the result.
                 temp.append(std::to_string(res));
-                // If there is string after the sign.
+                // If there is string afterCal the sign.
                 if (afterI != std::string::npos)
                     temp.append(afterRaw.substr(afterI));
                 // Parse to string.
@@ -204,7 +202,7 @@ private:
     }
 
     // Return the index of closest char of char array to start, return '-1' if not found.
-    size_t isOccurs(std::string str, const char* signs)
+    size_t isOccurs(std::string_view str, const char* signs)
     {
         size_t isOccur = std::string::npos;
         for (size_t i = 0; i < strlen(signs); i++)
@@ -213,7 +211,7 @@ private:
     }
 
     // Return the index of closest char of char array to end, return '-1' if not found.
-    size_t isOccursLast(std::string str, const char* signs)
+    size_t isOccursLast(std::string_view str, const char* signs)
     {
         int isOccur = -1;
 
@@ -246,12 +244,24 @@ std::string jstring2string(JNIEnv *env, jstring jStr) {
 }
 
 extern "C" JNIEXPORT jdouble JNICALL
-Java_classes_Graph_stringFromJNI(JNIEnv *env, jobject thiz, jstring expRaw) {
+Java_classes_Graph_CalculateExp(JNIEnv *env, jobject thiz, jstring expRaw)
+{
+Interpeter in;
     std::string exp = jstring2string(env, expRaw);
     double res;
-    Interpeter* in = new Interpeter;
-    res = in->calculate(exp);
-    delete in;
+    res = in.calculate(exp);
     return res;
 }
+/*
+extern "C" JNIEXPORT jint JNICALL
+Java_classes_Graph_Alloc(JNIEnv *env, jobject thiz ){
+    in = new Interpeter;
+    return 0;
+}
+
+extern "C" JNIEXPORT jint JNICALL
+Java_classes_Graph_Free(JNIEnv *env, jobject thiz ){
+    delete in;
+    return 0;
+}*/
 

@@ -1,5 +1,7 @@
 package classes;
 
+import java.util.regex.Pattern;
+
 public class Interpeter {
 
 
@@ -9,7 +11,7 @@ public class Interpeter {
     final String subReplace;
 
 
-
+    Pattern regexPattern;
 
     String func;
 
@@ -17,6 +19,7 @@ public class Interpeter {
     {
         operators = "^*/+-";
         subReplace = "`";
+        regexPattern =  Pattern.compile("((?=[-+*^/])[-])([-]{0})");
     }
 
     public double calculate(String rawFunc) {
@@ -26,10 +29,10 @@ public class Interpeter {
     public double eval(final String expRaw) {
         String exp = expRaw
                 .toLowerCase()
-                .trim()
-                .replaceAll("\\s+","")
-                .replaceAll("((?=[-+*^/])[-])([-]{0})",subReplace);
-                ;
+                .replaceAll("\\s+","");
+        //.replaceAll("((?=[-+*^/])[-])([-]{0})",subReplace);
+
+        exp = regexPattern.matcher(exp).replaceAll(subReplace);
         //System.out.println(exp);
         double res;
 
@@ -83,18 +86,12 @@ public class Interpeter {
                 int beforeI = isOccursLast(beforeRaw, operators.toCharArray());
                 // If there is sign before.
                 if(beforeI != -1) {
-                    // If it's '-' and it's the first, so it's negative sign.
-                    //if(beforeRaw.charAt(beforeI) == '-' && beforeI == 0) // For Minus before number.
-                     //   beforeI--;
                     // Get the string after the sign.
                     before = beforeRaw.substring(beforeI + 1);
                 }
 
                 // Check if sign after.
                 int afterI = isOccurs(afterRaw, operators.toCharArray());
-                // If it's minus sign of number.
-                //if(afterI == 0 && afterRaw.charAt(afterI) == '-')
-                //    afterI = isOccurs(afterRaw.substring(1),operators.toCharArray());
                 // If sign exists.
                 if(afterI != -1) {
                     // Get the string before it.
@@ -127,7 +124,7 @@ public class Interpeter {
                             break;
                         }
                         case '-': {
-                             res = Double.parseDouble(before) - Double.parseDouble(after);
+                            res = Double.parseDouble(before) - Double.parseDouble(after);
                             break;
                         }
                     } // Calculate.
@@ -137,7 +134,7 @@ public class Interpeter {
                     // Parse the exp.
                     res = Double.parseDouble(before + after);
                 }
-                String resStr = String.valueOf(res).replaceAll("((?=[-+*^/])[-])([-]{0})",subReplace);
+                String resStr = regexPattern.matcher(String.valueOf(res)).replaceAll(subReplace);
 
                 // For string addition.
                 StringBuilder temp = new StringBuilder();
@@ -145,12 +142,13 @@ public class Interpeter {
                 if(beforeI != -1)
                     temp.append(beforeRaw.substring(0,beforeI+1));
                 // Added the result.
-                temp.append(res);
+                temp.append(resStr);
                 // If there is string after the sign.
                 if(afterI != -1)
                     temp.append(afterRaw.substring(afterI));
                 // Parse to string.
-                exp = temp.toString().replaceAll("((?=[-+*^/])[-])([-]{0})",subReplace);
+                exp = temp.toString();
+                exp = regexPattern.matcher(exp).replaceAll(subReplace);
                 //System.out.println(exp);
             }
         }
@@ -201,5 +199,6 @@ public class Interpeter {
 
         return isOccur;
     }
+
 
 }

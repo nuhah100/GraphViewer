@@ -12,7 +12,8 @@ android {
         versionName "1.0"
         externalNativeBuild {
             cmake {
-                cppFlags "-std=c++17"
+                arguments '-DBUILD_TESTING=OFF','-DANDROID_TOOLCHAIN=gcc4.9'
+                cppFlags "-O3 -std=c++11"
             }
         }
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

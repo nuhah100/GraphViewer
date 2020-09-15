@@ -40,10 +40,11 @@
         android:layout_height="wrap_content"
 
         android:backgroundTint="#FFFFFF"
-        android:text="Calculate"
         android:onClick="renderFunc"
+        android:text="Calculate"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="155dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
     <!--
