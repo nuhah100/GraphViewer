@@ -10,12 +10,12 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
-        externalNativeBuild {
+        /*externalNativeBuild {
             cmake {
                 arguments '-DBUILD_TESTING=OFF','-DANDROID_TOOLCHAIN=gcc4.9'
                 cppFlags "-O3 -std=c++11"
             }
-        }
+        }*/
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -29,12 +29,12 @@ android {
     lintOptions {
         abortOnError false
     }
-
+/*
     externalNativeBuild {
         cmake {
             path file('src/main/cpp/CMakeLists.txt')
         }
-    }
+    }*/
     ndkVersion '21.3.6528147'
 }
 

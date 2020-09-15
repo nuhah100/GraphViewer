@@ -15,13 +15,13 @@ set(distribution_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../../distribution)
 # Gradle automatically packages shared libraries with your APK.
 
 add_library( # Sets the name of the library.
-        native-lib
+       native-lib
 
         # Sets the library as a shared library.
-        SHARED
+       SHARED
 
         # Provides a relative path to your source file(s).
-        native-lib.cpp )
+       native-lib.cpp )
 
 find_library(log-lib
         log )

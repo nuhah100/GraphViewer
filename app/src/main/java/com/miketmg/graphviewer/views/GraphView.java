@@ -22,6 +22,7 @@ public class GraphView extends View {
     Path GraphPath;
     Paint GraphPaint;
     Paint AxisPaint;
+    Paint AsimPaint;
     Paint HelpLinePaint;
 
     float x1, x2, y1, y2;
@@ -71,6 +72,14 @@ public class GraphView extends View {
         AxisPaint.setStrokeJoin(Paint.Join.ROUND);
         AxisPaint.setStrokeWidth(4f);
 
+        AsimPaint = new Paint();
+
+        AsimPaint.setAntiAlias(true);
+        AsimPaint.setColor(Color.BLUE);
+        AsimPaint.setStyle(Paint.Style.STROKE);
+        AsimPaint.setStrokeJoin(Paint.Join.ROUND);
+        AsimPaint.setStrokeWidth(4f);
+
         HelpLinePaint = new Paint();
 
         HelpLinePaint.setAntiAlias(true);
@@ -112,6 +121,17 @@ public class GraphView extends View {
 
         // Render Graph.
 
+        for (Line<Float> asim:
+             gp.Asim) {
+            canvas.drawLine(
+                    asim.x1,
+                    asim.y1,
+                    asim.x2,
+                    asim.y2,
+                    AsimPaint
+            );
+
+        }
 
 
         long start = System.currentTimeMillis();

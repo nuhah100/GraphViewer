@@ -3,6 +3,8 @@ package classes;
 import android.graphics.Canvas;
 import android.graphics.Path;
 
+import java.util.ArrayList;
+
 public class Graph {
 
     private float MinX, MaxX;
@@ -11,6 +13,8 @@ public class Graph {
     public Canvas canvas;
 
     private String function;
+
+    public ArrayList<Line<Float>> Asim;
 
     private Interpeter in = new Interpeter();
     /*
@@ -24,13 +28,21 @@ public class Graph {
 
     public Graph()
     {
-        function = "x^2";
+        function = "1/x";
 
         MinX = -10;
         MaxX = 10;
 
-        MinY = function(0) - 20;
-        MaxY = function(MaxX) + 20;
+        Asim = new ArrayList<Line<Float> >();
+try {
+    MinY = function(0) - 20;
+    MaxY = function(MaxX) + 20;
+}
+catch (Exception e)
+{
+    MinY = -20;
+    MaxY = 120;
+}
 
         //function
         //in ;
@@ -42,16 +54,32 @@ public class Graph {
     {
         //Alloc();
         Path graph = new Path();
-
+        double x = 0,y = 0,j = 0;
         for(int i = 0; i <= canvas.getWidth(); i+=4)
         {
-            float x = remap(i,0,canvas.getWidth(), MinX, MaxX);
-            float y = function(x);
-            float j = remap(y,MinY,MaxY, canvas.getHeight() ,0);
-            if(i == 0)
-                graph.moveTo(i,j);
-            else
-                graph.lineTo(i,j);
+            try {
+                x = remap(i, 0, canvas.getWidth(), MinX, MaxX);
+                y = function((float) x);
+                j = remap((float) y, MinY, MaxY, canvas.getHeight(), 0);
+                if (i == 0)
+                    graph.moveTo(i, (float) j);
+                else
+                    graph.lineTo(i, (float) j);
+            }
+            catch (ArithmeticException e)
+            {
+                Line<Float> l = new Line<Float>();
+                l.x1 = remap((float) x,MinX,MaxX,0,canvas.getWidth());
+                l.x2 = remap((float) x,MinX,MaxX,0,canvas.getWidth());
+                l.y1 = 0f;
+                l.y2 =(float) canvas.getHeight();
+                Asim.add(l);
+                System.out.println(i);
+            }
+            catch (Exception e)
+            {
+                System.out.println(i);
+            }
             //GraphPath.addCircle(i,j,2.5f, Path.Direction.CW);
         }
         //Free();
@@ -127,6 +155,7 @@ public class Graph {
     public void updateFunc(String f)
     {
         function = f.toLowerCase().trim();
+        Asim = new ArrayList<Line<Float>>();
     }
 }
 

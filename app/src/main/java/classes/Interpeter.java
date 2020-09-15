@@ -1,5 +1,6 @@
 package classes;
 
+import java.text.DecimalFormat;
 import java.util.regex.Pattern;
 
 public class Interpeter {
@@ -18,7 +19,7 @@ public class Interpeter {
     public Interpeter()
     {
         operators = "^*/+-";
-        subReplace = "`";
+        subReplace = "@";
         regexPattern =  Pattern.compile("((?=[-+*^/])[-])([-]{0})");
     }
 
@@ -50,7 +51,8 @@ public class Interpeter {
 
     private double calculateExp(String exp) {
         double res = 0;
-
+        DecimalFormat df = new DecimalFormat("#");
+        df.setMaximumFractionDigits(6);
         // If no signs parse and exit.
         if (isOccurs(exp,operators.toCharArray()) == -1)
             return Double.parseDouble(exp);
@@ -69,7 +71,8 @@ public class Interpeter {
             String signs = opOrder[i];
 
             // While it's still not exp and include signs.
-            while (!tryParseDouble(exp.replaceAll(subReplace,"-")) && isOneContains(exp, signs.toCharArray()) ) {
+            while (!tryParseDouble(exp.replaceAll(subReplace,"-")) && isOneContains(exp, signs.toCharArray().clone()) ) {
+                exp = regexPattern.matcher(exp).replaceAll(subReplace);
                 // Get sign place.
                 int signPlace = isOccurs(exp, signs.toCharArray());
                 // Get actual sign.
@@ -115,7 +118,7 @@ public class Interpeter {
                         }
                         case '/': {
                             if (Double.parseDouble(after) == 0)
-                                throw new IllegalArgumentException("Argument 'divisor' is 0");
+                                throw new ArithmeticException();
                             res = Double.parseDouble(before) / Double.parseDouble(after);
                             break;
                         }
@@ -134,8 +137,7 @@ public class Interpeter {
                     // Parse the exp.
                     res = Double.parseDouble(before + after);
                 }
-                String resStr = regexPattern.matcher(String.valueOf(res)).replaceAll(subReplace);
-
+                String resStr = df.format(res);
                 // For string addition.
                 StringBuilder temp = new StringBuilder();
                 // If there is string before the sign.
@@ -147,14 +149,14 @@ public class Interpeter {
                 if(afterI != -1)
                     temp.append(afterRaw.substring(afterI));
                 // Parse to string.
-                exp = temp.toString();
-                exp = regexPattern.matcher(exp).replaceAll(subReplace);
+                exp = temp.toString().replaceAll(subReplace,"-");
                 //System.out.println(exp);
             }
         }
 
         // Parse the exp because no signs involved:)
-        return Double.parseDouble(exp.replace(subReplace,"-"));
+        System.out.println(exp.replaceAll(subReplace,"-"));
+        return Double.parseDouble(exp.replaceAll(subReplace,"-"));
     }
 
     // Function to check if string can parse as double.
