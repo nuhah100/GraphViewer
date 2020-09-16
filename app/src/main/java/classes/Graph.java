@@ -75,7 +75,7 @@ catch (Exception e)
                 l.y1 = 0f;
                 l.y2 =(float) canvas.getHeight();
                 Asim.add(l);
-                System.out.println(i);
+               // System.out.println(i);
             }
             catch (Exception e)
             {

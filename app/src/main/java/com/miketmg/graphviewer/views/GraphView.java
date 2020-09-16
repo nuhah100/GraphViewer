@@ -15,7 +15,7 @@ import androidx.annotation.Nullable;
 import classes.Graph;
 import classes.Line;
 
-public class GraphView extends View {
+public class GraphView extends View  {
 
     Graph gp;
 
@@ -25,12 +25,15 @@ public class GraphView extends View {
     Paint AsimPaint;
     Paint HelpLinePaint;
 
+
     float x1, x2, y1, y2;
     private VelocityTracker mVelocityTracker = null;
 
 
+
     public GraphView(Context context) {
         super(context);
+        setFocusable(true);
 
         init(null);
     }
@@ -87,6 +90,7 @@ public class GraphView extends View {
         HelpLinePaint.setStyle(Paint.Style.STROKE);
         HelpLinePaint.setStrokeJoin(Paint.Join.ROUND);
         HelpLinePaint.setStrokeWidth(4f);
+
     }
 
     @Override
@@ -127,7 +131,7 @@ public class GraphView extends View {
         long start = System.currentTimeMillis();
         GraphPath = gp.render();
         long elapsedTime = System.currentTimeMillis() - start;
-        System.out.println("Time that takes: " +(elapsedTime/1000F));
+        //System.out.println("Time that takes: " +(elapsedTime/1000F));
         canvas.drawPath(GraphPath, GraphPaint);
 
         for (Line<Float> asim:
@@ -141,6 +145,7 @@ public class GraphView extends View {
             );
 
         }
+
     }
 
     @Override
@@ -150,9 +155,19 @@ public class GraphView extends View {
         if(gp.canvas == null)
             return false;
 
+
+        // get pointer index from the event object
+        int pointerIndex = event.getActionIndex();
+
+        // get pointer ID
+        int pointerId = event.getPointerId(pointerIndex);
+
+        // get masked (not specific to a pointer) action
+        int maskedAction = event.getActionMasked();
+        System.out.println(event.getPointerCount());
         float amount = .2f;
-        int pointerId = event.getPointerId(event.getActionIndex());
-        switch(event.getAction()) {
+
+        switch(event.getAction() & MotionEvent.ACTION_MASK) {
             case (MotionEvent.ACTION_DOWN):
                 x1 = event.getX();
                 y1 = event.getY();
@@ -167,6 +182,8 @@ public class GraphView extends View {
                     //mVelocityTracker.clear();
                 }
                 //mVelocityTracker.addMovement(event);
+
+
                 break;
             case (MotionEvent.ACTION_MOVE): {
                 //mVelocityTracker.addMovement(event);
@@ -184,15 +201,26 @@ public class GraphView extends View {
                 x1 = x2;
                 y1 = y2;
 
+
+                // ------
+
                 break;
             }
             case (MotionEvent.ACTION_UP): {
                 // Continue motion
+                // ---
+
                 break;
             }
             case MotionEvent.ACTION_CANCEL: {
                 // Return a VelocityTracker object back to be re-used by others.
                 mVelocityTracker.recycle();
+                break;
+            }
+
+            case MotionEvent.ACTION_POINTER_UP: {
+
+                //System.out.println("TOUCH TWO: " + event.getPointerId(0)getX() + ", " + getY());
                 break;
             }
         }
@@ -211,4 +239,6 @@ public class GraphView extends View {
     public void updateFunc(String f) {
         gp.updateFunc(f);
     }
+
+
 }

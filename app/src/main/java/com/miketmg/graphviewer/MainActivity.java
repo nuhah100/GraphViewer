@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         t = (TextInputEditText) findViewById(R.id.txtFunc);
         //double d = stringFromJNI("3^2 + 3");
         //System.out.println(d);
+
     }
 
 

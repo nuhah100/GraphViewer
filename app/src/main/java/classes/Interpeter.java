@@ -185,7 +185,7 @@ public class Interpeter {
         }
 
         // Parse the exp because no signs involved:)
-        System.out.println(exp.replaceAll(subReplace,"-"));
+        //System.out.println(exp.replaceAll(subReplace,"-"));
         return Double.parseDouble(exp.replaceAll(subReplace,"-"));
     }
 
