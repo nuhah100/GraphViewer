@@ -40,8 +40,8 @@ try {
 }
 catch (Exception e)
 {
-    MinY = -20;
-    MaxY = 120;
+    MinY = -10;
+    MaxY = 60;
 }
 
         //function
@@ -52,6 +52,7 @@ catch (Exception e)
 
     public Path render()
     {
+        Asim.clear();
         //Alloc();
         Path graph = new Path();
         double x = 0,y = 0,j = 0;
@@ -155,7 +156,7 @@ catch (Exception e)
     public void updateFunc(String f)
     {
         function = f.toLowerCase().trim();
-        Asim = new ArrayList<Line<Float>>();
+        Asim.clear();
     }
 }
 

@@ -11,6 +11,7 @@ public class Interpeter {
     // Replacement for sign '-' which is not operator.
     final String subReplace;
 
+    final String[] functions;
 
     Pattern regexPattern;
 
@@ -21,6 +22,7 @@ public class Interpeter {
         operators = "^*/+-";
         subReplace = "@";
         regexPattern =  Pattern.compile("((?=[-+*^/])[-])([-]{0})");
+        functions = new String[]{"sin","cos","tan"};
     }
 
     public double calculate(String rawFunc) {
@@ -36,6 +38,34 @@ public class Interpeter {
         exp = regexPattern.matcher(exp).replaceAll(subReplace);
         //System.out.println(exp);
         double res;
+
+        for (int i = 0; i < functions.length; i++)
+        {
+            String fun = functions[i];
+            while (exp.contains(fun))
+            {
+                int openBracket, closeBracket;
+                openBracket = exp.indexOf(fun) + 3;
+                closeBracket = exp.indexOf(')',openBracket);
+                Double tempRes = eval(exp.substring(openBracket + 1 ,closeBracket));
+                switch (fun)
+                {
+                    case "sin": {
+                        tempRes = Math.sin(tempRes);
+                        break;
+                    }
+                    case "cos" : {
+                        tempRes = Math.cos(tempRes);
+                        break;
+                    }
+                    case "tan" : {
+                        tempRes = Math.tan(tempRes);
+                        break;
+                    }
+                }
+                exp = exp.substring(0,openBracket - 3) + tempRes.toString() + exp.substring(closeBracket+1);
+            }
+        }
 
         while(exp.contains("(") || exp.contains(")"))
         {

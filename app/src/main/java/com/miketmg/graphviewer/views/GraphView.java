@@ -78,7 +78,7 @@ public class GraphView extends View {
         AsimPaint.setColor(Color.BLUE);
         AsimPaint.setStyle(Paint.Style.STROKE);
         AsimPaint.setStrokeJoin(Paint.Join.ROUND);
-        AsimPaint.setStrokeWidth(4f);
+        AsimPaint.setStrokeWidth(8f);
 
         HelpLinePaint = new Paint();
 
@@ -121,8 +121,17 @@ public class GraphView extends View {
 
         // Render Graph.
 
+
+
+
+        long start = System.currentTimeMillis();
+        GraphPath = gp.render();
+        long elapsedTime = System.currentTimeMillis() - start;
+        System.out.println("Time that takes: " +(elapsedTime/1000F));
+        canvas.drawPath(GraphPath, GraphPaint);
+
         for (Line<Float> asim:
-             gp.Asim) {
+                gp.Asim) {
             canvas.drawLine(
                     asim.x1,
                     asim.y1,
@@ -132,13 +141,6 @@ public class GraphView extends View {
             );
 
         }
-
-
-        long start = System.currentTimeMillis();
-        GraphPath = gp.render();
-        long elapsedTime = System.currentTimeMillis() - start;
-        System.out.println("Time that takes: " +(elapsedTime/1000F));
-        canvas.drawPath(GraphPath, GraphPaint);
     }
 
     @Override
