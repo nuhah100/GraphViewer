@@ -79,7 +79,7 @@ catch (Exception e)
             }
             catch (Exception e)
             {
-                System.out.println(i);
+                System.out.println(e.getMessage());
             }
             //GraphPath.addCircle(i,j,2.5f, Path.Direction.CW);
         }

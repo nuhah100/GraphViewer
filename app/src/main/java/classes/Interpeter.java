@@ -75,7 +75,7 @@ public class Interpeter {
             Double tempRes = eval(exp.substring(openBracket + 1,closeBracket));
             exp = exp.substring(0,openBracket) + tempRes.toString() + exp.substring(closeBracket+1);
         }
-        res = calculateExp(exp);
+        res = calculateExp(exp.replaceAll(subReplace,"-"));
         return res;
     }
 
