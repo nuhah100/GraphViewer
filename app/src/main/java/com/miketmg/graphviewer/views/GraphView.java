@@ -145,7 +145,7 @@ public class GraphView extends View  {
         long start = System.currentTimeMillis();
         // Multithreading
 
-        Thread t = new Thread(new Runnable(){public void run(){}});
+
         GraphPath = gp.renderFunc();
         //ExecutorService service = Executors.newCachedThreadPool();
         // -------
