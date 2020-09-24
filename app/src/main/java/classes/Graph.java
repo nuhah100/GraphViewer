@@ -53,9 +53,32 @@ public class Graph{
         //in ;
     }
 
+    public void cache()
+    {
+        double y;
+        for(double x = MinX;  x <= MaxX; x += 0.05)
+        {
 
+            try {
+                //x = remap(i, 0, canvas.getWidth(), MinX, MaxX);
+                if(Cache.containsKey(x))
+                    y = Cache.get(x);
+                else {
+                    y = function(x);
+                    Cache.put(x,y);
+                }
+            }
+            catch (ArithmeticException e)
+            {
+            }
+            catch (Exception e)
+            {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
 
-    public  Path render(double MinX, double MaxX, double MinY, double MaxY)
+    public Path render(double MinX, double MaxX, double MinY, double MaxY)
     {
         Asim.clear();
         Path graph = new Path();
@@ -111,7 +134,7 @@ public class Graph{
                 j = remap((float) y, MinY, MaxY, canvas.getHeight(), 0);
                 if (i == 0 || isAsim) {
                     graph.moveTo((float) i, (float) j);
-                    System.out.println(isAsim);
+                    System.out.println(i);
                     isAsim = false;
                 }
                 else
@@ -237,6 +260,12 @@ public class Graph{
 
     public Path renderFunc() {
         return render(MinX,MaxX,MinY,MaxY);
+    }
+
+    public Path renderFuncPart(int i) {
+        double dis = MaxX - MinX;
+        double disPart = dis/5;
+        return new Path();//render((MinX + ),,MinY,MaxY);
     }
 }
 
