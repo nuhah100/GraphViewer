@@ -4,19 +4,23 @@ import android.graphics.Canvas;
 import android.graphics.Path;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Graph {
 
-    private float MinX, MaxX;
-    private float MinY, MaxY;
+    private double MinX, MaxX;
+    private double MinY, MaxY;
 
     public Canvas canvas;
 
     private String function;
 
-    public ArrayList<Line<Float>> Asim;
+    public ArrayList<Line<Double>> Asim;
 
     private Interpeter in = new Interpeter();
+
+    private HashMap<Double, Double> Cache;
+
     /*
        public native double CalculateExp(String func);
      public native int Alloc();
@@ -26,23 +30,22 @@ public class Graph {
     }
     */
 
-    public Graph()
-    {
+    public Graph() {
         function = "1/x";
 
         MinX = -10;
         MaxX = 10;
 
-        Asim = new ArrayList<Line<Float> >();
-try {
-    MinY = function(0) - 20;
-    MaxY = function(MaxX) + 20;
-}
-catch (Exception e)
-{
-    MinY = -10;
-    MaxY = 60;
-}
+        Asim = new ArrayList<Line<Double>>();
+        try {
+            MinY = function(0) - 20;
+            MaxY = function(MaxX) + 20;
+        } catch (Exception e) {
+            MinY = -10;
+            MaxY = 60;
+        }
+
+        Cache = new HashMap<Double, Double>();
 
         //function
         //in ;
@@ -58,9 +61,14 @@ catch (Exception e)
         double x = 0,y = 0,j = 0;
         for(int i = 0; i <= canvas.getWidth(); i+=4)
         {
+            x = remap(i, 0, canvas.getWidth(), MinX, MaxX);
             try {
-                x = remap(i, 0, canvas.getWidth(), MinX, MaxX);
-                y = function((float) x);
+                if(Cache.containsKey(x))
+                    y = Cache.get(x);
+                else {
+                    y = function((float) x);
+                    Cache.put(x,y);
+                }
                 j = remap((float) y, MinY, MaxY, canvas.getHeight(), 0);
                 if (i == 0)
                     graph.moveTo(i, (float) j);
@@ -69,11 +77,11 @@ catch (Exception e)
             }
             catch (ArithmeticException e)
             {
-                Line<Float> l = new Line<Float>();
-                l.x1 = remap((float) x,MinX,MaxX,0,canvas.getWidth());
-                l.x2 = remap((float) x,MinX,MaxX,0,canvas.getWidth());
-                l.y1 = 0f;
-                l.y2 =(float) canvas.getHeight();
+                Line<Double> l = new Line<Double>();
+                l.x1 = remap(x,MinX,MaxX,0,canvas.getWidth());
+                l.x2 = remap(x,MinX,MaxX,0,canvas.getWidth());
+                l.y1 = Double.valueOf(0);
+                l.y2 =(double) canvas.getHeight();
                 Asim.add(l);
                // System.out.println(i);
             }
@@ -103,45 +111,70 @@ catch (Exception e)
        // System.out.println("X: " + MinX + " " + MaxX);
     }
 
-    public Line<Float> getXAxis()
+    public Line<Double> getXAxis()
     {
-        Line<Float> l = new Line<Float>();
-        l.x1 = Float.valueOf(0);
+        Line<Double> l = new Line<Double>();
+        l.x1 = Double.valueOf(0);
         l.y1 = remap(0, MinY,MaxY, canvas.getHeight(),0);
-        l.x2 = Float.valueOf(canvas.getWidth());
+        l.x2 = Double.valueOf(canvas.getWidth());
         l.y2 = remap(0, MinY,MaxY, canvas.getHeight(),0);
         return l;
     }
 
-    public Line<Float> getYAxis()
+    public Line<Double> getYAxis()
     {
-        Line<Float> l = new Line<Float>();
+        Line<Double> l = new Line<Double>();
         l.x1 = remap(0, MinX, MaxX, 0, canvas.getWidth());
-        l.y1 = Float.valueOf(0);
+        l.y1 = Double.valueOf(0);
         l.x2 = remap(0, MinX, MaxX, 0, canvas.getWidth());
-        l.y2 = Float.valueOf(canvas.getHeight());
+        l.y2 = Double.valueOf(canvas.getHeight());
         return l;
     }
 
-    private float function(float x)
+    public ArrayList<Line<Double>> getHelperLines() {
+        ArrayList<Line<Double>> arr = new ArrayList<Line<Double>>();
+        Line<Double> l;
+        for (double i = -10; i <= 10; i += 2) {
+            l = new Line<Double>();
+            l.x1 = remap(i,MinX,MaxX,0,canvas.getWidth());
+            l.y1 = 0d;
+            l.x2 = remap(i,MinX,MaxX,0,canvas.getWidth());
+            l.y2 = (double)canvas.getHeight();
+            arr.add(l);
+        }
+
+        for (double i = -30; i <= 80; i += 2) {
+            l = new Line<Double>();
+            l.x1 = Double.valueOf(0);
+            l.y1 = remap(i, MinY,MaxY, canvas.getHeight(),0);
+            l.x2 = Double.valueOf(canvas.getWidth());
+            l.y2 = remap(i, MinY,MaxY, canvas.getHeight(),0);
+            arr.add(l);
+        }
+
+        return arr;
+    }
+
+
+    private double function(double x)
     {
         // Need to do function that user input.
         //return (float) Math.pow(x, 2);
         String exp = function.replace("x",String.format("%.3f",x));
        // System.out.println(exp);
-        return (float) in.calculate(exp);
-        //return (float) CalculateExp(exp);
+        return (double) in.calculate(exp);
+        //return (double) CalculateExp(exp);
     }
 
 
     // Function that transform value from group to another group.
-    public static float remap (float value, float fromOrg, float toOrg, float fromDes, float toDes) {
+    public static double remap (double value, double fromOrg, double toOrg, double fromDes, double toDes) {
         return (value - fromOrg) / (toOrg - fromOrg) * (toDes - fromDes) + fromDes;
     }
 
 
 
-    public void touchMove(float x1, float y1, float x2, float y2) {
+    public void touchMove(double x1, double y1, double x2, double y2) {
         double velX = remap(x2, 0 , canvas.getWidth(), MinX, MaxX) - remap(x1, 0 , canvas.getWidth(),MinX, MaxX);
         double velY = remap(y2, canvas.getHeight(), 0, MinY, MaxY) - remap(y1, canvas.getHeight(), 0, MinY, MaxY);
 

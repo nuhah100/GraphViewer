@@ -12,6 +12,8 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
+
 import classes.Graph;
 import classes.Line;
 
@@ -89,7 +91,7 @@ public class GraphView extends View  {
         HelpLinePaint.setColor(Color.GRAY);
         HelpLinePaint.setStyle(Paint.Style.STROKE);
         HelpLinePaint.setStrokeJoin(Paint.Join.ROUND);
-        HelpLinePaint.setStrokeWidth(4f);
+        HelpLinePaint.setStrokeWidth(3.4f);
 
     }
 
@@ -103,48 +105,65 @@ public class GraphView extends View  {
         // Set the according canvas.
         gp.canvas = canvas;
 
-        Line<Float> xAxis, yAxis;
+        Line<Double> xAxis, yAxis;
         xAxis = gp.getXAxis();
         yAxis = gp.getYAxis();
 
         // Draw Axis Lines
         canvas.drawLine(
-                xAxis.x1,
-                xAxis.y1,
-                xAxis.x2,
-                xAxis.y2,
+                xAxis.x1.floatValue(),
+                xAxis.y1.floatValue(),
+                xAxis.x2.floatValue(),
+                xAxis.y2.floatValue(),
                 AxisPaint
         ); // X Axis
         canvas.drawLine(
-                yAxis.x1,
-                yAxis.y1,
-                yAxis.x2,
-                yAxis.y2,
+                yAxis.x1.floatValue(),
+                yAxis.y1.floatValue(),
+                yAxis.x2.floatValue(),
+                yAxis.y2.floatValue(),
                 AxisPaint
         ); // Y Axis
+
+
+        ArrayList<Line<Double>> ar = gp.getHelperLines();
+        for(int i = 0; i  < ar.size(); i++) {
+            System.out.println(i);
+            Line<Double> l = ar.get(i);
+            canvas.drawLine(
+                    l.x1.floatValue(),
+                    l.y1.floatValue(),
+                    l.x2.floatValue(),
+                    l.y2.floatValue(),
+                    HelpLinePaint
+            );
+        }
+
 
         // Render Graph.
 
 
-
-
+        // For test purpose.
         long start = System.currentTimeMillis();
         GraphPath = gp.render();
         long elapsedTime = System.currentTimeMillis() - start;
         //System.out.println("Time that takes: " +(elapsedTime/1000F));
         canvas.drawPath(GraphPath, GraphPaint);
 
-        for (Line<Float> asim:
+        for (Line<Double> asim:
                 gp.Asim) {
             canvas.drawLine(
-                    asim.x1,
-                    asim.y1,
-                    asim.x2,
-                    asim.y2,
+                    asim.x1.floatValue(),
+                    asim.y1.floatValue(),
+                    asim.x2.floatValue(),
+                    asim.y2.floatValue(),
                     AsimPaint
             );
 
         }
+
+
+
 
     }
 
