@@ -59,6 +59,7 @@ public class Graph {
         //Alloc();
         Path graph = new Path();
         double x = 0,y = 0,j = 0;
+        boolean isAsim = false;
         for(int i = 0; i <= canvas.getWidth(); i+=4)
         {
             x = remap(i, 0, canvas.getWidth(), MinX, MaxX);
@@ -70,8 +71,10 @@ public class Graph {
                     Cache.put(x,y);
                 }
                 j = remap((float) y, MinY, MaxY, canvas.getHeight(), 0);
-                if (i == 0)
+                if (i == 0 || isAsim) {
                     graph.moveTo(i, (float) j);
+                    isAsim = false;
+                }
                 else
                     graph.lineTo(i, (float) j);
             }
@@ -83,6 +86,7 @@ public class Graph {
                 l.y1 = Double.valueOf(0);
                 l.y2 =(double) canvas.getHeight();
                 Asim.add(l);
+                isAsim = true;
                // System.out.println(i);
             }
             catch (Exception e)
