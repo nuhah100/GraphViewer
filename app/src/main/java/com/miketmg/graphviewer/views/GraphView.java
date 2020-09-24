@@ -76,10 +76,10 @@ public class GraphView extends View  {
         AxisPaint = new Paint();
 
         AxisPaint.setAntiAlias(true);
-        AxisPaint.setColor(Color.DKGRAY);
+        AxisPaint.setColor(Color.BLACK);
         AxisPaint.setStyle(Paint.Style.STROKE);
         AxisPaint.setStrokeJoin(Paint.Join.ROUND);
-        AxisPaint.setStrokeWidth(4f);
+        AxisPaint.setStrokeWidth(6.4f);
 
         AsimPaint = new Paint();
 
@@ -189,6 +189,8 @@ public class GraphView extends View  {
         long elapsedTime = System.currentTimeMillis() - start;
         //System.out.println("Time that takes: " +(elapsedTime/1000F));
         canvas.drawPath(GraphPath, GraphPaint);
+
+        GraphPath = null;
 
         for (Line<Double> asim:
                 gp.Asim) {

@@ -3,6 +3,7 @@ package classes;
 import java.text.DecimalFormat;
 import java.util.regex.Pattern;
 
+
 public class Interpeter {
 
 
@@ -231,6 +232,5 @@ public class Interpeter {
 
         return isOccur;
     }
-
 
 }
