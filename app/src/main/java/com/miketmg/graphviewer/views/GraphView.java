@@ -36,7 +36,6 @@ public class GraphView extends View  {
     public GraphView(Context context) {
         super(context);
         setFocusable(true);
-
         init(null);
     }
 
@@ -128,7 +127,6 @@ public class GraphView extends View  {
 
         ArrayList<Line<Double>> ar = gp.getHelperLines();
         for(int i = 0; i  < ar.size(); i++) {
-            System.out.println(i);
             Line<Double> l = ar.get(i);
             canvas.drawLine(
                     l.x1.floatValue(),
@@ -145,7 +143,12 @@ public class GraphView extends View  {
 
         // For test purpose.
         long start = System.currentTimeMillis();
-        GraphPath = gp.render();
+        // Multithreading
+
+        Thread t = new Thread(new Runnable(){public void run(){}});
+        GraphPath = gp.renderFunc();
+        //ExecutorService service = Executors.newCachedThreadPool();
+        // -------
         long elapsedTime = System.currentTimeMillis() - start;
         //System.out.println("Time that takes: " +(elapsedTime/1000F));
         canvas.drawPath(GraphPath, GraphPaint);
@@ -183,7 +186,7 @@ public class GraphView extends View  {
 
         // get masked (not specific to a pointer) action
         int maskedAction = event.getActionMasked();
-        System.out.println(event.getPointerCount());
+        //System.out.println(event.getPointerCount());
         float amount = .2f;
 
         switch(event.getAction() & MotionEvent.ACTION_MASK) {

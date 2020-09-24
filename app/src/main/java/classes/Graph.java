@@ -6,7 +6,7 @@ import android.graphics.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Graph {
+public class Graph{
 
     private double MinX, MaxX;
     private double MinY, MaxY;
@@ -20,6 +20,8 @@ public class Graph {
     private Interpeter in = new Interpeter();
 
     private HashMap<Double, Double> Cache;
+
+    public int PartsRender = 1;
 
     /*
        public native double CalculateExp(String func);
@@ -53,14 +55,13 @@ public class Graph {
 
 
 
-    public Path render()
+    public  Path render(double MinX, double MaxX, double MinY, double MaxY)
     {
         Asim.clear();
-        //Alloc();
         Path graph = new Path();
-        double x = 0,y = 0,j = 0;
+        double x = 0,y = 0,j = 0, i = 0;
         boolean isAsim = false;
-        for(int i = 0; i <= canvas.getWidth(); i+=4)
+/*        for(int i = 0; i <= canvas.getWidth(); i+=4)
         {
             x = remap(i, 0, canvas.getWidth(), MinX, MaxX);
             try {
@@ -87,7 +88,45 @@ public class Graph {
                 l.y2 =(double) canvas.getHeight();
                 Asim.add(l);
                 isAsim = true;
-               // System.out.println(i);
+            }
+            catch (Exception e)
+            {
+                System.out.println(e.getMessage());
+            }
+        }
+*/
+
+        for(x = MinX;  x <= MaxX; x += 0.05)
+        {
+
+            try {
+                //x = remap(i, 0, canvas.getWidth(), MinX, MaxX);
+                if(Cache.containsKey(x))
+                    y = Cache.get(x);
+                else {
+                    y = function(x);
+                    Cache.put(x,y);
+                }
+                i = remap(x,MinX,MaxX,0,canvas.getWidth());
+                j = remap((float) y, MinY, MaxY, canvas.getHeight(), 0);
+                if (i == 0 || isAsim) {
+                    graph.moveTo((float) i, (float) j);
+                    System.out.println(isAsim);
+                    isAsim = false;
+                }
+                else
+                    graph.lineTo((float) i, (float) j);
+            }
+            catch (ArithmeticException e)
+            {
+                isAsim = true;
+                Line<Double> l = new Line<Double>();
+                l.x1 = remap(x,MinX,MaxX,0,canvas.getWidth());
+                l.x2 = remap(x,MinX,MaxX,0,canvas.getWidth());
+                l.y1 = Double.valueOf(0);
+                l.y2 =(double) canvas.getHeight();
+                Asim.add(l);
+                // System.out.println(i);
             }
             catch (Exception e)
             {
@@ -95,7 +134,6 @@ public class Graph {
             }
             //GraphPath.addCircle(i,j,2.5f, Path.Direction.CW);
         }
-        //Free();
         return graph;
     }
 
@@ -162,9 +200,10 @@ public class Graph {
 
     private double function(double x)
     {
+        //return 1/x;
         // Need to do function that user input.
         //return (float) Math.pow(x, 2);
-        String exp = function.replace("x",String.format("%.3f",x));
+        String exp = function.replaceAll("x",String.format("%.3f",x));
        // System.out.println(exp);
         return (double) in.calculate(exp);
         //return (double) CalculateExp(exp);
@@ -194,6 +233,10 @@ public class Graph {
     {
         function = f.toLowerCase().trim();
         Asim.clear();
+    }
+
+    public Path renderFunc() {
+        return render(MinX,MaxX,MinY,MaxY);
     }
 }
 
