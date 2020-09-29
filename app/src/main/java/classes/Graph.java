@@ -24,10 +24,8 @@ public class Graph{
 
     private HashMap<Double, Double> Cache;
 
-    public int PartsRender = 1;
-
     Expression Calc;
-
+    double ratio;
     /*
        public native double CalculateExp(String func);
      public native int Alloc();
@@ -38,7 +36,7 @@ public class Graph{
     */
 
     public Graph() {
-        function = "x^3";
+        function = "1/(x)";
 
         MinX = -10;
         MaxX = 10;
@@ -87,7 +85,7 @@ public class Graph{
         }
     }
 
-    public Path render(double MinX, double MaxX, double MinY, double MaxY)
+    public Path[] render(double MinX, double MaxX, double MinY, double MaxY)
     {
         Asim.clear();
         Path graph = new Path();
@@ -134,7 +132,7 @@ public class Graph{
         }
 
 
-        return graph;
+        return new Path[]{graph};
     }
 
     public void moveVertically(double vel)
@@ -175,8 +173,26 @@ public class Graph{
 
     public ArrayList<Line<Double>> getHelperLines() {
         ArrayList<Line<Double>> arr = new ArrayList<Line<Double>>();
+
+        double valX=3d, valY=ratio*valX;
+
+        //valX = Math.abs(MaxX - MinX)/10;
+        //valY = Math.abs(MaxY - MinY)/10;
+
         Line<Double> l;
-        for (double i = -10; i <= 10; i += 2) {
+
+
+        for (double i = 0; i <= MaxX; i += valX)
+        {
+            l = new Line<Double>();
+            l.x1 = remap(i,MinX,MaxX,0,canvas.getWidth());
+            l.y1 = 0d;
+            l.x2 = remap(i,MinX,MaxX,0,canvas.getWidth());
+            l.y2 = (double)canvas.getHeight();
+            arr.add(l);
+        }
+        for (double i = 0; i >= MinX; i -= valX)
+        {
             l = new Line<Double>();
             l.x1 = remap(i,MinX,MaxX,0,canvas.getWidth());
             l.y1 = 0d;
@@ -185,7 +201,8 @@ public class Graph{
             arr.add(l);
         }
 
-        for (double i = -30; i <= 80; i += 2) {
+
+        for (double i = 0; i <= MaxY; i += valY) {
             l = new Line<Double>();
             l.x1 = Double.valueOf(0);
             l.y1 = remap(i, MinY,MaxY, canvas.getHeight(),0);
@@ -193,6 +210,16 @@ public class Graph{
             l.y2 = remap(i, MinY,MaxY, canvas.getHeight(),0);
             arr.add(l);
         }
+
+        for (double i = 0; i >= MinY; i -= valY) {
+            l = new Line<Double>();
+            l.x1 = Double.valueOf(0);
+            l.y1 = remap(i, MinY,MaxY, canvas.getHeight(),0);
+            l.x2 = Double.valueOf(canvas.getWidth());
+            l.y2 = remap(i, MinY,MaxY, canvas.getHeight(),0);
+            arr.add(l);
+        }
+
 
         return arr;
     }
@@ -235,10 +262,13 @@ public class Graph{
     public void updateFunc(String f)
     {
         function = f.toLowerCase().trim();
+        Calc = new ExpressionBuilder(function)
+                .variable("x")
+                .build();
         Asim.clear();
     }
 
-    public Path renderFunc() {
+    public Path[] renderFunc() {
         return render(MinX,MaxX,MinY,MaxY);
     }
 

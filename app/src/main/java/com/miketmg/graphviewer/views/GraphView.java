@@ -183,7 +183,7 @@ public class GraphView extends View  {
             GraphPath.op(mr.p.get(i), Path.Op.UNION);
 */// Try to do it after basic is done.
 
-        GraphPath = gp.renderFunc();
+        GraphPath = gp.renderFunc()[0];
 
         // -------
         long elapsedTime = System.currentTimeMillis() - start;
@@ -191,6 +191,7 @@ public class GraphView extends View  {
         canvas.drawPath(GraphPath, GraphPaint);
 
         GraphPath = null;
+        System.gc();
 
         for (Line<Double> asim:
                 gp.Asim) {
@@ -203,7 +204,6 @@ public class GraphView extends View  {
             );
 
         }
-
 
 
 

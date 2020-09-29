@@ -10,6 +10,7 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.agog.mathdisplay.MTMathView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.miketmg.graphviewer.views.GraphView;
 
@@ -19,14 +20,18 @@ public class MainActivity extends AppCompatActivity {
     GraphView gp;
     TextInputEditText t;
     Interpeter in;
+    MTMathView MathView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         gp = (GraphView) findViewById(R.id.GraphView);
         t = (TextInputEditText) findViewById(R.id.txtFunc);
+        MathView = findViewById(R.id.MathView);
         //double d = stringFromJNI("3^2 + 3");
         //System.out.println(d);
+        MathView.setFontSize(60);
+        MathView.setLatex("\\int_{-\\infty}^{\\infty}{e^{-x^2}dx} =\\sqrt{\\pi}");
 
     }
 
@@ -42,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void renderFunc(View view) {
         String f = t.getEditableText().toString();
+
         gp.updateFunc(f);
         gp.refresh();
     }
