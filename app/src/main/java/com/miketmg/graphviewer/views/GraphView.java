@@ -132,7 +132,7 @@ public class GraphView extends View  {
                 AxisPaint
         ); // Y Axis
 
-
+/*
         ArrayList<Line<Double>> ar = gp.getHelperLines();
         for(int i = 0; i  < ar.size(); i++) {
             Line<Double> l = ar.get(i);
@@ -144,7 +144,7 @@ public class GraphView extends View  {
                     HelpLinePaint
             );
         }
-
+*/// Enable after
 
         // Render Graph.
 
@@ -293,12 +293,13 @@ public class GraphView extends View  {
 
     public void refresh()
     {
-       //GraphPath = new Path();
+        GraphPath = new Path();
         invalidate();
     }
 
     public void updateFunc(String f) {
         gp.updateFunc(f);
+        refresh();
     }
 
 

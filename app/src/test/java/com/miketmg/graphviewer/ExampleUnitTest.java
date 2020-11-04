@@ -2,6 +2,9 @@ package com.miketmg.graphviewer;
 
 import org.junit.Test;
 
+import net.objecthunter.exp4j.Expression;
+import net.objecthunter.exp4j.ExpressionBuilder;
+
 import static org.junit.Assert.*;
 
 /**
@@ -12,6 +15,10 @@ import static org.junit.Assert.*;
 public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() {
-        assertEquals(4, 2 + 2);
+
+        Expression calc = new ExpressionBuilder("acos(23)")
+                .build();
+
+        assertEquals(Math.acos(23), calc.evaluate(), 0.01d);
     }
 }

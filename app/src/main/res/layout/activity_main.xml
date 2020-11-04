@@ -19,18 +19,6 @@
         app:layout_constraintVertical_bias="0.0"
         tools:layout_editor_absoluteX="0dp" />
 
-    <com.agog.mathdisplay.MTMathView
-        android:id="@+id/MathView"
-        android:textAlignment="center"
-        android:background="@color/colorBackground"
-        app:flow_horizontalAlign="center"
-        app:flow_verticalAlign="center"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="24dp"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="16dp" />
-
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/txtFunc"
         android:layout_width="match_parent"

@@ -65,7 +65,6 @@ public class Graph{
         double y;
         for(double x = MinX;  x <= MaxX; x += 0.009)
         {
-
             try {
                 //x = remap(i, 0, canvas.getWidth(), MinX, MaxX);
                 if(Cache.containsKey(x))
@@ -92,16 +91,15 @@ public class Graph{
         double x = 0,y = 0,j = 0, i = 0;
         boolean isAsim = false;
 
-        for(x = MinX;  x <= MaxX; x += 0.009)
-        {
+        for (x = MinX; x <= MaxX; x += 0.05) {
 
             try {
                 //x = remap(i, 0, canvas.getWidth(), MinX, MaxX);
-                if(Cache.containsKey(x))
+                if (Cache.containsKey(x))
                     y = Cache.get(x);
                 else {
                     y = function(x);
-                    Cache.put(x,y);
+                    Cache.put(x, y);
                 }
                 i = remap(x,MinX,MaxX,0,canvas.getWidth());
                 j = remap((float) y, MinY, MaxY, canvas.getHeight(), 0);
@@ -174,10 +172,7 @@ public class Graph{
     public ArrayList<Line<Double>> getHelperLines() {
         ArrayList<Line<Double>> arr = new ArrayList<Line<Double>>();
 
-        double valX=3d, valY=ratio*valX;
-
-        //valX = Math.abs(MaxX - MinX)/10;
-        //valY = Math.abs(MaxY - MinY)/10;
+        double valX = 3d, valY = .3 * valX;
 
         Line<Double> l;
 
