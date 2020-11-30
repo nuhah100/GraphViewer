@@ -84,6 +84,11 @@ public class Graph{
         }
     }
 
+    public void clearCache()
+    {
+        Cache.clear();
+    }
+
     public Path[] render(double MinX, double MaxX, double MinY, double MaxY)
     {
         Asim.clear();
@@ -228,6 +233,7 @@ public class Graph{
 
         //String exp = function.replaceAll("x",String.format("%.3f",x));
        // System.out.println(exp);
+        clearCache();
         Calc.setVariable("x", x);
         return Calc.evaluate();
         //return (double) in.calculate(exp);
@@ -256,6 +262,7 @@ public class Graph{
 
     public void updateFunc(String f)
     {
+        clearCache();
         function = f.toLowerCase().trim();
         Calc = new ExpressionBuilder(function)
                 .variable("x")
