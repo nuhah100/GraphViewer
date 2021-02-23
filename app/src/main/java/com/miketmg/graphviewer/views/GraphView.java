@@ -21,10 +21,10 @@ import classes.Line;
 
 public class GraphView extends View  {
 
-    Graph gp;
+    Graph gp,div;
 
-    Path GraphPath;
-    Paint GraphPaint;
+    Path GraphPath, DivPath;
+    Paint GraphPaint, DivPaint;
     Paint AxisPaint;
     Paint AsimPaint;
     Paint HelpLinePaint;
@@ -65,6 +65,10 @@ public class GraphView extends View  {
 
         gp.cache();
 
+        div = new Graph();
+
+        div.cache();
+
         GraphPaint = new Paint();
 
         GraphPaint.setAntiAlias(true);
@@ -72,6 +76,14 @@ public class GraphView extends View  {
         GraphPaint.setStyle(Paint.Style.STROKE);
         GraphPaint.setStrokeJoin(Paint.Join.ROUND);
         GraphPaint.setStrokeWidth(5f);
+
+        DivPaint = new Paint();
+
+        DivPaint.setAntiAlias(true);
+        DivPaint.setColor(Color.BLUE);
+        DivPaint.setStyle(Paint.Style.STROKE);
+        DivPaint.setStrokeJoin(Paint.Join.ROUND);
+        DivPaint.setStrokeWidth(3f);
 
         AxisPaint = new Paint();
 
@@ -111,7 +123,7 @@ public class GraphView extends View  {
 
         // Set the according canvas.
         gp.canvas = canvas;
-
+        div.canvas = canvas;
         Line<Double> xAxis, yAxis;
         xAxis = gp.getXAxis();
         yAxis = gp.getYAxis();
@@ -184,11 +196,12 @@ public class GraphView extends View  {
 */// Try to do it after basic is done.
 
         GraphPath = gp.renderFunc()[0];
-
+        DivPath  = div.renderFunc()[0];
         // -------
         long elapsedTime = System.currentTimeMillis() - start;
         //System.out.println("Time that takes: " +(elapsedTime/1000F));
         canvas.drawPath(GraphPath, GraphPaint);
+        canvas.drawPath(DivPath, DivPaint);
 
         GraphPath = null;
         System.gc();
@@ -237,11 +250,11 @@ public class GraphView extends View  {
                     // Retrieve a new VelocityTracker object to watch the velocity
                     // of a motion.
                     mVelocityTracker = VelocityTracker.obtain();
-                } else {
+                } //else {
 
                     // Reset the velocity tracker back to its initial state.
                     //mVelocityTracker.clear();
-                }
+                //}
                 //mVelocityTracker.addMovement(event);
 
 
@@ -257,7 +270,7 @@ public class GraphView extends View  {
 
                 // Move values in graph.
                 gp.touchMove(x1,y1,x2,y2);
-
+                div.touchMove(x1,y1,x2,y2);
                 // Save the current.
                 x1 = x2;
                 y1 = y2;
@@ -294,11 +307,20 @@ public class GraphView extends View  {
     public void refresh()
     {
         GraphPath = new Path();
+        DivPath = new Path();
         invalidate();
     }
 
     public void updateFunc(String f) {
+        f = f.toLowerCase();
         gp.updateFunc(f);
+        String divT = String.format(
+                "(%s-(%s))/%f",f.replaceAll("x", String.format("(x+%f)", Graph.DivA))
+                ,f
+                ,Graph.DivA
+        );
+        System.out.println(divT);
+        div.updateFunc(divT);
         refresh();
     }
 

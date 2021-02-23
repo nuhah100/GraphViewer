@@ -24,6 +24,10 @@ public class Graph{
 
     private HashMap<Double, Double> Cache;
 
+    public static double DivA = 0.00001;
+
+    public static double Percision = 0.07;
+
     Expression Calc;
     double ratio;
     /*
@@ -41,7 +45,7 @@ public class Graph{
         MinX = -10;
         MaxX = 10;
 
-        Asim = new ArrayList<Line<Double>>();
+        Asim = new ArrayList<>();
         try {
             MinY = function(0) - 20;
             MaxY = function(MaxX) + 20;
@@ -50,7 +54,7 @@ public class Graph{
             MaxY = 60;
         }
 
-        Cache = new HashMap<Double, Double>();
+        Cache = new HashMap<>();
 
 
         Calc = new ExpressionBuilder(function)
@@ -63,19 +67,14 @@ public class Graph{
     public void cache()
     {
         double y;
-        for(double x = MinX;  x <= MaxX; x += 0.009)
+        for(double x = MinX;  x <= MaxX; x += Percision)
         {
             try {
                 //x = remap(i, 0, canvas.getWidth(), MinX, MaxX);
-                if(Cache.containsKey(x))
-                    y = Cache.get(x);
-                else {
+                if(!Cache.containsKey(x)) {
                     y = function(x);
                     Cache.put(x,y);
                 }
-            }
-            catch (ArithmeticException e)
-            {
             }
             catch (Exception e)
             {
@@ -96,8 +95,7 @@ public class Graph{
         double x = 0,y = 0,j = 0, i = 0;
         boolean isAsim = false;
 
-        for (x = MinX; x <= MaxX; x += 0.05) {
-
+        for (x = MinX; x <= MaxX; x += Percision) {
             try {
                 //x = remap(i, 0, canvas.getWidth(), MinX, MaxX);
                 if (Cache.containsKey(x))
@@ -122,7 +120,7 @@ public class Graph{
                 Line<Double> l = new Line<Double>();
                 l.x1 = remap(x,MinX,MaxX,0,canvas.getWidth());
                 l.x2 = remap(x,MinX,MaxX,0,canvas.getWidth());
-                l.y1 = Double.valueOf(0);
+                l.y1 = 0d;
                 l.y2 =(double) canvas.getHeight();
                 Asim.add(l);
                 // System.out.println(i);
@@ -168,7 +166,7 @@ public class Graph{
     {
         Line<Double> l = new Line<Double>();
         l.x1 = remap(0, MinX, MaxX, 0, canvas.getWidth());
-        l.y1 = Double.valueOf(0);
+        l.y1 = 0d;
         l.x2 = remap(0, MinX, MaxX, 0, canvas.getWidth());
         l.y2 = Double.valueOf(canvas.getHeight());
         return l;
@@ -204,7 +202,7 @@ public class Graph{
 
         for (double i = 0; i <= MaxY; i += valY) {
             l = new Line<Double>();
-            l.x1 = Double.valueOf(0);
+            l.x1 = 0d;
             l.y1 = remap(i, MinY,MaxY, canvas.getHeight(),0);
             l.x2 = Double.valueOf(canvas.getWidth());
             l.y2 = remap(i, MinY,MaxY, canvas.getHeight(),0);
@@ -213,7 +211,7 @@ public class Graph{
 
         for (double i = 0; i >= MinY; i -= valY) {
             l = new Line<Double>();
-            l.x1 = Double.valueOf(0);
+            l.x1 = 0d;
             l.y1 = remap(i, MinY,MaxY, canvas.getHeight(),0);
             l.x2 = Double.valueOf(canvas.getWidth());
             l.y2 = remap(i, MinY,MaxY, canvas.getHeight(),0);
