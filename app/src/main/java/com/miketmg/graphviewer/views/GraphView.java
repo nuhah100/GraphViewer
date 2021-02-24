@@ -1,5 +1,6 @@
 package com.miketmg.graphviewer.views;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -12,10 +13,10 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
-import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import classes.Function;
 import classes.Graph;
 import classes.Line;
 
@@ -63,11 +64,7 @@ public class GraphView extends View  {
     private void init(@Nullable AttributeSet attrs) {
         gp = new Graph();
 
-        gp.cache();
-
         div = new Graph();
-
-        div.cache();
 
         GraphPaint = new Paint();
 
@@ -314,12 +311,12 @@ public class GraphView extends View  {
     public void updateFunc(String f) {
         f = f.toLowerCase();
         gp.updateFunc(f);
+        @SuppressLint("DefaultLocale")
         String divT = String.format(
-                "(%s-(%s))/%f",f.replaceAll("x", String.format("(x+%f)", Graph.DivA))
+                "(%s-(%s))/%f",f.replaceAll("x", String.format("(x+%f)", Function.DivA))
                 ,f
-                ,Graph.DivA
+                , Function.DivA
         );
-        System.out.println(divT);
         div.updateFunc(divT);
         refresh();
     }

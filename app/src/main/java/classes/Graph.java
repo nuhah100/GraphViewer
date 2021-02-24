@@ -3,11 +3,7 @@ package classes;
 import android.graphics.Canvas;
 import android.graphics.Path;
 
-import net.objecthunter.exp4j.Expression;
-import net.objecthunter.exp4j.ExpressionBuilder;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Graph{
 
@@ -16,20 +12,14 @@ public class Graph{
 
     public Canvas canvas;
 
-    private String function;
-
     public ArrayList<Line<Double>> Asim;
-
-    private Interpeter in = new Interpeter();
-
-    private HashMap<Double, Double> Cache;
-
-    public static double DivA = 0.00001;
 
     public static double Percision = 0.07;
 
-    Expression Calc;
+    public Function Fx;
+
     double ratio;
+
     /*
        public native double CalculateExp(String func);
      public native int Alloc();
@@ -40,53 +30,27 @@ public class Graph{
     */
 
     public Graph() {
-        function = "1/(x)";
+
+        Fx = new Function("x");
 
         MinX = -10;
         MaxX = 10;
 
         Asim = new ArrayList<>();
         try {
-            MinY = function(0) - 20;
-            MaxY = function(MaxX) + 20;
+            MinY = Fx.calculate(0) - 20;
+            MaxY = Fx.calculate(MaxX) + 20;
         } catch (Exception e) {
             MinY = -10;
             MaxY = 60;
         }
 
-        Cache = new HashMap<>();
-
-
-        Calc = new ExpressionBuilder(function)
-                .variable("x")
-                .build();
         //function
         //in ;
     }
 
-    public void cache()
-    {
-        double y;
-        for(double x = MinX;  x <= MaxX; x += Percision)
-        {
-            try {
-                //x = remap(i, 0, canvas.getWidth(), MinX, MaxX);
-                if(!Cache.containsKey(x)) {
-                    y = function(x);
-                    Cache.put(x,y);
-                }
-            }
-            catch (Exception e)
-            {
-                System.out.println(e.getMessage());
-            }
-        }
-    }
 
-    public void clearCache()
-    {
-        Cache.clear();
-    }
+
 
     public Path[] render(double MinX, double MaxX, double MinY, double MaxY)
     {
@@ -98,12 +62,7 @@ public class Graph{
         for (x = MinX; x <= MaxX; x += Percision) {
             try {
                 //x = remap(i, 0, canvas.getWidth(), MinX, MaxX);
-                if (Cache.containsKey(x))
-                    y = Cache.get(x);
-                else {
-                    y = function(x);
-                    Cache.put(x, y);
-                }
+                y = Fx.calculate(x);
                 i = remap(x,MinX,MaxX,0,canvas.getWidth());
                 j = remap((float) y, MinY, MaxY, canvas.getHeight(), 0);
                 if (graph.isEmpty() || isAsim) {
@@ -223,28 +182,11 @@ public class Graph{
     }
 
 
-    private double function(double x)
-    {
-
-        // Need to do function that user input.
-
-
-        //String exp = function.replaceAll("x",String.format("%.3f",x));
-       // System.out.println(exp);
-        clearCache();
-        Calc.setVariable("x", x);
-        return Calc.evaluate();
-        //return (double) in.calculate(exp);
-        //return (double) CalculateExp(exp);
-    }
-
 
     // Function that transform value from group to another group.
     public static double remap (double value, double fromOrg, double toOrg, double fromDes, double toDes) {
         return (value - fromOrg) / (toOrg - fromOrg) * (toDes - fromDes) + fromDes;
     }
-
-
 
     public void touchMove(double x1, double y1, double x2, double y2) {
         double velX = remap(x2, 0 , canvas.getWidth(), MinX, MaxX) - remap(x1, 0 , canvas.getWidth(),MinX, MaxX);
@@ -260,12 +202,7 @@ public class Graph{
 
     public void updateFunc(String f)
     {
-        clearCache();
-        function = f.toLowerCase().trim();
-        Calc = new ExpressionBuilder(function)
-                .variable("x")
-                .build();
-        Asim.clear();
+        Fx.updateFunction(f);
     }
 
     public Path[] renderFunc() {
