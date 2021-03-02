@@ -11,8 +11,8 @@ public class Function {
     String Fx;
     Expression Calc;
 
-    public static double DivA = 0.00001;
-    private HashMap<Double, Double> Cache;
+    public static double DivA = 0.000001;
+    protected HashMap<Double, Double> Cache;
 
     public Function(String fx)
     {
@@ -21,7 +21,7 @@ public class Function {
         Cache = new HashMap<>();
 
 
-        Calc = new ExpressionBuilder(fx)
+        Calc = new ExpressionBuilder(Fx)
                 .variable("x")
                 .build();
     }
@@ -33,6 +33,7 @@ public class Function {
             y = Cache.get(x);
         else {
             Calc.setVariable("x", x);
+            Fx = Fx;
             y =  Calc.evaluate();
             Cache.put(x, y);
         }

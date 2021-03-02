@@ -7,10 +7,10 @@ import java.util.ArrayList;
 
 public class Graph{
 
-    private double MinX, MaxX;
-    private double MinY, MaxY;
+    private static double MinX, MaxX;
+    private static double MinY, MaxY;
 
-    public Canvas canvas;
+    public static Canvas canvas;
 
     public ArrayList<Line<Double>> Asim;
 
@@ -29,9 +29,29 @@ public class Graph{
     }
     */
 
-    public Graph() {
+    public Graph(FunctionType type) {
 
-        Fx = new Function("x");
+        switch(type)
+        {
+            case DERIVATIVE:
+            {
+                Fx = new Derivative("x");
+                break;
+            }
+
+            case INTEGRATION:
+            {
+                Fx = new Integration("x");
+                break;
+            }
+
+            case FUNCTION:
+            {
+                Fx = new Function("x");
+                break;
+            }
+        }
+
 
         MinX = -10;
         MaxX = 10;
@@ -45,6 +65,7 @@ public class Graph{
             MaxY = 60;
         }
 
+        System.out.println(MinY + " " + MaxY);
         //function
         //in ;
     }
@@ -95,7 +116,7 @@ public class Graph{
         return new Path[]{graph};
     }
 
-    public void moveVertically(double vel)
+    public static void moveVertically(double vel)
     {
         MinY += vel;
         MaxY += vel;
@@ -103,7 +124,7 @@ public class Graph{
         //System.out.println("Y: " + MinY + " " + MaxY);
     }
 
-    public void moveHorizontally(double vel)
+    public static void moveHorizontally(double vel)
     {
         MinX += vel;
         MaxX += vel;
@@ -111,7 +132,7 @@ public class Graph{
        // System.out.println("X: " + MinX + " " + MaxX);
     }
 
-    public Line<Double> getXAxis()
+    public static Line<Double> getXAxis()
     {
         Line<Double> l = new Line<Double>();
         l.x1 = Double.valueOf(0);
@@ -121,7 +142,7 @@ public class Graph{
         return l;
     }
 
-    public Line<Double> getYAxis()
+    public static Line<Double> getYAxis()
     {
         Line<Double> l = new Line<Double>();
         l.x1 = remap(0, MinX, MaxX, 0, canvas.getWidth());
@@ -188,7 +209,7 @@ public class Graph{
         return (value - fromOrg) / (toOrg - fromOrg) * (toDes - fromDes) + fromDes;
     }
 
-    public void touchMove(double x1, double y1, double x2, double y2) {
+    public static void touchMove(double x1, double y1, double x2, double y2) {
         double velX = remap(x2, 0 , canvas.getWidth(), MinX, MaxX) - remap(x1, 0 , canvas.getWidth(),MinX, MaxX);
         double velY = remap(y2, canvas.getHeight(), 0, MinY, MaxY) - remap(y1, canvas.getHeight(), 0, MinY, MaxY);
 

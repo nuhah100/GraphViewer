@@ -1,6 +1,5 @@
 package com.miketmg.graphviewer.views;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -16,7 +15,7 @@ import androidx.annotation.Nullable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import classes.Function;
+import classes.FunctionType;
 import classes.Graph;
 import classes.Line;
 
@@ -62,9 +61,9 @@ public class GraphView extends View  {
     }
 
     private void init(@Nullable AttributeSet attrs) {
-        gp = new Graph();
+        gp = new Graph(FunctionType.FUNCTION);
 
-        div = new Graph();
+        div = new Graph(FunctionType.DERIVATIVE);
 
         GraphPaint = new Paint();
 
@@ -119,11 +118,10 @@ public class GraphView extends View  {
         // OPTIMIZE RUNTIME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         // Set the according canvas.
-        gp.canvas = canvas;
-        div.canvas = canvas;
+        Graph.canvas = canvas;
         Line<Double> xAxis, yAxis;
-        xAxis = gp.getXAxis();
-        yAxis = gp.getYAxis();
+        xAxis = Graph.getXAxis();
+        yAxis = Graph.getYAxis();
 
         // Draw Axis Lines
         canvas.drawLine(
@@ -197,10 +195,12 @@ public class GraphView extends View  {
         // -------
         long elapsedTime = System.currentTimeMillis() - start;
         //System.out.println("Time that takes: " +(elapsedTime/1000F));
-        canvas.drawPath(GraphPath, GraphPaint);
         canvas.drawPath(DivPath, DivPaint);
+        canvas.drawPath(GraphPath, GraphPaint);
+
 
         GraphPath = null;
+        DivPath = null;
         System.gc();
 
         for (Line<Double> asim:
@@ -223,7 +223,7 @@ public class GraphView extends View  {
     public boolean onTouchEvent(MotionEvent event)
     {
 
-        if(gp.canvas == null)
+        if(Graph.canvas == null)
             return false;
 
 
@@ -266,8 +266,7 @@ public class GraphView extends View  {
                 y2 = event.getY();
 
                 // Move values in graph.
-                gp.touchMove(x1,y1,x2,y2);
-                div.touchMove(x1,y1,x2,y2);
+                Graph.touchMove(x1,y1,x2,y2);
                 // Save the current.
                 x1 = x2;
                 y1 = y2;
@@ -311,13 +310,7 @@ public class GraphView extends View  {
     public void updateFunc(String f) {
         f = f.toLowerCase();
         gp.updateFunc(f);
-        @SuppressLint("DefaultLocale")
-        String divT = String.format(
-                "(%s-(%s))/%f",f.replaceAll("x", String.format("(x+%f)", Function.DivA))
-                ,f
-                , Function.DivA
-        );
-        div.updateFunc(divT);
+        div.updateFunc(f);
         refresh();
     }
 
