@@ -13,8 +13,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.textfield.TextInputEditText;
 import com.miketmg.graphviewer.views.GraphView;
 
-import classes.Interpeter;
 
+
+/* TODO
+ Zoom in
+ Integral
+ Save functions to database with sql
+ better UI, add widgets
+ DELETE ALL STUPID COMMITS!!!
+ Optimize all
+
+
+*/
 public class MainActivity extends AppCompatActivity {
     GraphView gp;
     TextInputEditText t;
