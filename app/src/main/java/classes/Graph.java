@@ -14,7 +14,7 @@ public class Graph{
 
     public ArrayList<Line<Double>> Asim;
 
-    public static double Percision = 0.07;
+    public double percision = 0.07;
 
     public Function Fx;
 
@@ -42,6 +42,7 @@ public class Graph{
             case INTEGRATION:
             {
                 Fx = new Integration("x");
+                percision = 1;
                 break;
             }
 
@@ -80,7 +81,7 @@ public class Graph{
         double x = 0,y = 0,j = 0, i = 0;
         boolean isAsim = false;
 
-        for (x = MinX; x <= MaxX; x += Percision) {
+        for (x = MinX; x <= MaxX; x += percision) {
             try {
                 //x = remap(i, 0, canvas.getWidth(), MinX, MaxX);
                 y = Fx.calculate(x);

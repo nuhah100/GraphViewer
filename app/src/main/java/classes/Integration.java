@@ -22,9 +22,8 @@ public class Integration extends Function {
 
     @Override
     public double calculate(double x) {
-
-
-        return super.calculate(x);
+        return 0;
+        //return super.calculate(x);
     }
 
     private double integral(double a, double b, int n) {
@@ -44,7 +43,6 @@ public class Integration extends Function {
             area = _plus;
 
         }
-
         return area;
 
     }
@@ -70,13 +68,6 @@ public class Integration extends Function {
         return h / 3 * (super.calculate(a) + 2 * firstSeries + 4 * secondSeries + super.calculate(b));
     }
 
-
-    private int GetField(double x)
-    {
-        if(ZeroPoints.size() == 0)
-            return (int) (Math.abs(x)/x);
-        return 1;
-    }
 
 
 }
