@@ -3,6 +3,7 @@ package com.miketmg.graphviewer;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,7 +21,6 @@ import com.miketmg.graphviewer.views.GraphView;
  Zoom in
  Integral
  better UI, add widgets
- add music
  add reminder
  DELETE ALL STUPID COMMITS!!!
  Optimize all
@@ -28,7 +28,7 @@ import com.miketmg.graphviewer.views.GraphView;
 public class MainActivity extends AppCompatActivity {
     GraphView gp;
     TextInputEditText t;
-
+    MediaPlayer mediaPlayer;
 
     public final static int REQUEST_CODE_SAVES = 1;
     @Override
@@ -37,6 +37,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         gp = (GraphView) findViewById(R.id.GraphView);
         t = (TextInputEditText) findViewById(R.id.txtFunc);
+
+        mediaPlayer = MediaPlayer.create(this, R.raw.king);
+        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
     }
 
 
@@ -73,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void getFunctionFromDatabase()
     {
+
         Intent i = new Intent(this, Saves.class);
         startActivityForResult(i, REQUEST_CODE_SAVES);
     }
