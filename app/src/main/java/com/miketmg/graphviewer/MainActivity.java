@@ -20,10 +20,10 @@ import com.miketmg.graphviewer.views.GraphView;
  Integral
  Save functions to database with sql
  better UI, add widgets
+ add music
+ add reminder
  DELETE ALL STUPID COMMITS!!!
  Optimize all
-
-
 */
 public class MainActivity extends AppCompatActivity {
     GraphView gp;
