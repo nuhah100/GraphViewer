@@ -1,6 +1,7 @@
 package com.miketmg.graphviewer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -29,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     GraphView gp;
     TextInputEditText t;
 
+
+    public final static int REQUEST_CODE_SAVES = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,5 +69,31 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return super.dispatchTouchEvent( event );
+    }
+
+
+    public void getFunctionFromDatabase()
+    {
+        Intent i = new Intent(this, Saves.class);
+        startActivityForResult(i, REQUEST_CODE_SAVES);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case REQUEST_CODE_SAVES:
+                Bundle extra = data.getExtras();
+                if(extra == null)
+                    return;
+                String function = extra.getString("Function");
+                gp.updateFunc(function);
+                gp.refresh();
+                break;
+        }
+    }
+
+    public void getFunctionFromData(View view) {
+        getFunctionFromDatabase();
     }
 }
