@@ -9,7 +9,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".integral"></activity>
         <activity android:name=".Saves" />
         <activity android:name=".MainActivity">
             <intent-filter>

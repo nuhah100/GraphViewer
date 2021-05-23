@@ -85,11 +85,6 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         startActivityForResult(i, REQUEST_CODE_SAVES);
     }
 
-    public void integralCal()
-    {
-        Intent i = new Intent(this, Saves.class);
-        startActivity(i);
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
