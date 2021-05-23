@@ -19,7 +19,6 @@ import com.miketmg.graphviewer.views.GraphView;
 /* TODO
  Zoom in
  Integral
- Save functions to database with sql
  better UI, add widgets
  add music
  add reminder
