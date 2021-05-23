@@ -5,10 +5,13 @@ import android.content.Intent;
 import android.graphics.Rect;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.PopupMenu;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,17 +21,16 @@ import com.miketmg.graphviewer.views.GraphView;
 
 
 /* TODO
- Zoom in
  Integral
  better UI, add widgets
  add reminder
- DELETE ALL STUPID COMMITS!!!
- Optimize all
 */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
     GraphView gp;
     TextInputEditText t;
     MediaPlayer mediaPlayer;
+    PopupMenu popup;
+    MenuInflater inflater;
 
     public final static int REQUEST_CODE_SAVES = 1;
     @Override
@@ -41,10 +43,12 @@ public class MainActivity extends AppCompatActivity {
         mediaPlayer = MediaPlayer.create(this, R.raw.king);
         mediaPlayer.setLooping(true);
         mediaPlayer.start();
+
+        popup = new PopupMenu(this, findViewById(R.id.btnMenu));
+        popup.setOnMenuItemClickListener(this);
+        inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.menu, popup.getMenu());
     }
-
-
-
 
     //TODO add function transforming and showing.
 
@@ -77,9 +81,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void getFunctionFromDatabase()
     {
-
         Intent i = new Intent(this, Saves.class);
         startActivityForResult(i, REQUEST_CODE_SAVES);
+    }
+
+    public void integralCal()
+    {
+        Intent i = new Intent(this, Saves.class);
+        startActivity(i);
     }
 
     @Override
@@ -97,7 +106,21 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void getFunctionFromData(View view) {
-        getFunctionFromDatabase();
+    public void showPopupMenu(View view) {
+        popup.show();
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.saves_menu:
+                getFunctionFromDatabase();
+                return true;
+            case R.id.integral_menu:
+                // Still dont
+                return true;
+            default:
+                return super.onOptionsItemSelected(menuItem);
+        }
     }
 }
