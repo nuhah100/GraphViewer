@@ -5,6 +5,4 @@
             android:title="Saves"
             />
 
-        <item android:id="@+id/integral_menu"
-            android:title="Integral" />
 </menu>
