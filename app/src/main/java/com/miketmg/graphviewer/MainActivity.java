@@ -187,9 +187,6 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             case R.id.saves_menu:
                 getFunctionFromDatabase();
                 return true;
-            case R.id.integral_menu:
-                // Still dont
-                return true;
             default:
                 return super.onOptionsItemSelected(menuItem);
         }
