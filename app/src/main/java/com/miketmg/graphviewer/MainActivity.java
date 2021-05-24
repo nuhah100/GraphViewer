@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Rect;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -18,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.textfield.TextInputEditText;
 import com.miketmg.graphviewer.views.GraphView;
 
+import classes.MathUtility;
 
 
 /* TODO
@@ -39,6 +42,25 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         setContentView(R.layout.activity_main);
         gp = (GraphView) findViewById(R.id.GraphView);
         t = (TextInputEditText) findViewById(R.id.txtFunc);
+        t.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                String function = charSequence.toString().toLowerCase();
+                if(function.length() != 0 && MathUtility.isValidateFunction(function))
+                    renderFunc(function);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
 
         mediaPlayer = MediaPlayer.create(this, R.raw.king);
         mediaPlayer.setLooping(true);
@@ -53,8 +75,8 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     //TODO add function transforming and showing.
 
 
-    public void renderFunc(View view) {
-        String f = t.getEditableText().toString();
+    public void renderFunc(String function) {
+        String f = function.toString();
         gp.updateFunc(f);
         gp.refresh();
     }

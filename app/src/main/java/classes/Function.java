@@ -51,4 +51,19 @@ public class Function {
         //Asim.clear();
     }
 
+    public boolean validateFunction()
+    {
+        try
+        {
+            Expression Cal = new ExpressionBuilder(Fx)
+                    .variable("x")
+                    .build();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            return false;
+        }
+    }
+
 }

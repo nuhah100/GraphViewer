@@ -227,6 +227,7 @@ public class Graph{
         Fx.updateFunction(f);
     }
 
+
     public Path[] renderFunc() {
         return render(MinX,MaxX,MinY,MaxY);
     }

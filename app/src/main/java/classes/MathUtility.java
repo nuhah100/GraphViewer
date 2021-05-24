@@ -14,6 +14,18 @@ public final class MathUtility {
         return Sign((int) x);
     }
 
+    public static boolean isValidateFunction(String function)
+    {
+        try {
+            Function fx = new Function(function);
+            return fx.validateFunction();
+        }
+        catch (Exception ex)
+        {
+            return false;
+        }
+    }
+
 
 }
 
