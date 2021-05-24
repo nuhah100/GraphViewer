@@ -14,12 +14,14 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.miketmg.graphviewer.views.GraphView;
 
+import classes.Integration;
 import classes.MathUtility;
 
 
@@ -30,10 +32,12 @@ import classes.MathUtility;
 */
 public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
     GraphView gp;
-    TextInputEditText t;
+    TextInputEditText functionEdit, startEdit, endEdit;
+    TextView result;
     MediaPlayer mediaPlayer;
     PopupMenu popup;
     MenuInflater inflater;
+    String startIn,endIn;
 
     public final static int REQUEST_CODE_SAVES = 1;
     @Override
@@ -41,8 +45,8 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         gp = (GraphView) findViewById(R.id.GraphView);
-        t = (TextInputEditText) findViewById(R.id.txtFunc);
-        t.addTextChangedListener(new TextWatcher() {
+        functionEdit = (TextInputEditText) findViewById(R.id.txtFunc);
+        functionEdit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -70,6 +74,46 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         popup.setOnMenuItemClickListener(this);
         inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.menu, popup.getMenu());
+
+        startEdit = findViewById(R.id.txtStartIn);
+        endEdit = findViewById(R.id.txtEndIn);
+        startEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                startIn = charSequence.toString();
+                updateIntegral();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        endEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                endIn = charSequence.toString();
+                updateIntegral();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        result = findViewById(R.id.txtViewRes);
+
     }
 
     //TODO add function transforming and showing.
@@ -79,6 +123,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         String f = function.toString();
         gp.updateFunc(f);
         gp.refresh();
+        updateIntegral();
     }
 
 
@@ -123,6 +168,15 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         }
     }
 
+    private void updateIntegral()
+    {
+        if(!MathUtility.isValidateIntegralRange(startIn,endIn))
+            return;
+        Double start = Double.parseDouble(startIn), end = Double.parseDouble(endIn);
+        Integration i = new Integration(functionEdit.getEditableText().toString());
+        result.setText(String.valueOf(i.simpson(start, end)));
+    }
+
     public void showPopupMenu(View view) {
         popup.show();
     }
@@ -140,4 +194,5 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
                 return super.onOptionsItemSelected(menuItem);
         }
     }
+
 }

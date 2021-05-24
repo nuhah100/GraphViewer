@@ -26,6 +26,20 @@ public final class MathUtility {
         }
     }
 
+    public static boolean isValidateIntegralRange(String start, String end)
+    {
+        return start != null && end != null && start.length() != 0 && end.length() != 0 && isNumeric(start) && isNumeric(end) && (Double.parseDouble(start) < Double.parseDouble(end));
+    }
+
+    public static boolean isNumeric(String str) {
+        try {
+            Double.parseDouble(str);
+            return true;
+        } catch(NumberFormatException e){
+            return false;
+        }
+    }
+
 
 }
 

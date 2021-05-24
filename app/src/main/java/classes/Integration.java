@@ -9,8 +9,8 @@ public class Integration extends Function {
 
     public Integration(String fx) {
         super(fx);
-        ZeroPoints = new ArrayList<Double>() ;
-        calculateZero();
+        //ZeroPoints = new ArrayList<Double>() ;
+        //calculateZero();
     }
 
     private void calculateZero() {

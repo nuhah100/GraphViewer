@@ -32,6 +32,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/GraphView" />
 
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/txtStartIn"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="72dp"
+
+        android:hint="Start"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/GraphView" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/txtEndIn"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="72dp"
+
+        android:hint="End"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintStart_toEndOf="@+id/txtStartIn"
+        app:layout_constraintTop_toBottomOf="@+id/GraphView" />
+
     <ImageView
         android:id="@+id/btnMenu"
         android:layout_width="43dp"
@@ -45,11 +70,21 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_menu_manage" />
 
+    <TextView
+        android:id="@+id/txtViewRes"
+        android:layout_width="79dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="72dp"
+        android:textAlignment="center"
+        android:textSize="22dp"
+        app:layout_constraintStart_toEndOf="@+id/txtEndIn"
+        app:layout_constraintTop_toBottomOf="@+id/GraphView" />
+
 
     <!--
     TODO:
     1. user input => custom user input.
-    2. buttons.
     -->
 
 
