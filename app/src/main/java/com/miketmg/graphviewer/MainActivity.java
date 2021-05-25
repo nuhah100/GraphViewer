@@ -3,7 +3,6 @@ package com.miketmg.graphviewer;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -34,11 +33,10 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     GraphView gp;
     TextInputEditText functionEdit, startEdit, endEdit;
     TextView result;
-    MediaPlayer mediaPlayer;
     PopupMenu popup;
     MenuInflater inflater;
     String startIn,endIn;
-
+    Intent musicService;
     public final static int REQUEST_CODE_SAVES = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,11 +62,6 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
 
             }
         });
-
-
-        mediaPlayer = MediaPlayer.create(this, R.raw.king);
-        mediaPlayer.setLooping(true);
-        mediaPlayer.start();
 
         popup = new PopupMenu(this, findViewById(R.id.btnMenu));
         popup.setOnMenuItemClickListener(this);
@@ -186,6 +179,10 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         switch (menuItem.getItemId()) {
             case R.id.saves_menu:
                 getFunctionFromDatabase();
+                return true;
+            case R.id.music:
+                musicService = new Intent(this, MusicService.class);
+                startService(musicService);
                 return true;
             default:
                 return super.onOptionsItemSelected(menuItem);

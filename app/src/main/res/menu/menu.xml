@@ -4,5 +4,8 @@
         <item android:id="@+id/saves_menu"
             android:title="Saves"
             />
+        <item android:id="@+id/music"
+            android:title="Music"
+            />
 
 </menu>
