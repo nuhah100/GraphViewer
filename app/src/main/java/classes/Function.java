@@ -8,10 +8,14 @@ import java.util.HashMap;
 
 public class Function {
 
+    // Function itself
     String Fx;
+    // Calculator for calculate
     Expression Calc;
 
+    // How close is the derivative
     public static double DivA = 0.000001;
+    // Caching
     protected HashMap<Double, Double> Cache;
 
 
@@ -33,6 +37,7 @@ public class Function {
 
     }
 
+    // Calculate the function itself
     public double calculate(double x)
     {
         double y = 0;
@@ -48,6 +53,7 @@ public class Function {
     }
 
 
+    // Update function
     public void updateFunction(String fx)
     {
         Cache.clear();
@@ -58,6 +64,7 @@ public class Function {
         //Asim.clear();
     }
 
+    // Validate function
     public boolean validateFunction()
     {
         try
@@ -73,21 +80,4 @@ public class Function {
         }
     }
 
-    private void calculateBoundaries()
-    {
-        Expression Cal = new ExpressionBuilder(Fx)
-                .variable("x")
-                .build();
-        for (double x = -Double.MAX_VALUE; x < Double.MAX_VALUE; x += Double.MIN_VALUE)
-        {
-            Cal.setVariable("x", x);
-            try {
-                Cal.evaluate();
-            }
-            catch (Exception ex)
-            {
-
-            }
-        }
-    }
 }

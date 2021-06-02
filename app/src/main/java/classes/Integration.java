@@ -1,10 +1,6 @@
 package classes;
 
-import java.util.ArrayList;
-
 public class Integration extends Function {
-
-    private ArrayList<Double> ZeroPoints;
 
 
     public Integration(String fx) {
@@ -13,12 +9,6 @@ public class Integration extends Function {
         //calculateZero();
     }
 
-    private void calculateZero() {
-        for (double x = -Double.MAX_VALUE; x <= Double.MAX_VALUE; x+= 0.000000001)
-            if(calculate(x) == 0)
-                ZeroPoints.add(x);
-
-    }
 
     @Override
     public double calculate(double x) {
@@ -26,26 +16,6 @@ public class Integration extends Function {
         //return super.calculate(x);
     }
 
-    private double integral(double a, double b, int n) {
-
-        double h = ((b - a) / n);
-
-        double area = 0.0;
-
-        for (int i = 0; (i < n); i++) {
-
-            double _f = super.calculate((a + (i * h)));
-
-            double _multiply = (h * _f);
-
-            double _plus = (area + _multiply);
-
-            area = _plus;
-
-        }
-        return area;
-
-    }
 
     // Default n' values.
     public double simpson(double a, double b)

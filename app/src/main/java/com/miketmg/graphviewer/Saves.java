@@ -22,7 +22,9 @@ import database.FunctionsDbHelper;
 
 public class Saves extends AppCompatActivity {
 
+    // List view
     ListView listView;
+    // Helper for communicating with database
     FunctionsDbHelper dbHelper;
 
     @Override
@@ -50,11 +52,11 @@ public class Saves extends AppCompatActivity {
         });
     }
 
+    // Get functions from databse
     private List<String> readDataFromDb()
     {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-    // Define a projection that specifies which columns from the database
-    // you will actually use after this query.
+        // Define a projection that specifies which columns from the database
         String[] projection = {
                 FunctionData.FunctionEntry.COLUMN_NAME_FUNCTION
         };
@@ -80,6 +82,7 @@ public class Saves extends AppCompatActivity {
         return functions;
     }
 
+    // Save function to database
     private void writeDataToDb(String function)
     {
         // Gets the data repository in write mode
@@ -93,6 +96,7 @@ public class Saves extends AppCompatActivity {
         long newRowId = db.insert(FunctionData.FunctionEntry.TABLE_NAME, null, values);
     }
 
+    // Go back to main activity
     public void goBack(String function)
     {
         Intent resultIntent = new Intent();
@@ -101,6 +105,7 @@ public class Saves extends AppCompatActivity {
         finish();
     }
 
+    // Check that function is validate
     public void addFuntion(View view) {
         EditText text = (EditText) findViewById(R.id.functionAddText);
         String function = text.getText().toString();

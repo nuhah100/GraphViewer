@@ -31,26 +31,38 @@ import classes.MathUtility;
  add reminder
 */
 public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
+
+    // Costume view of the graph
     GraphView gp;
+    // Text inputs
     TextInputEditText functionEdit, startEdit, endEdit;
+    // Text field to show result
     TextView result;
+    // Menu
     PopupMenu popup;
+    // Object to inject menu
     MenuInflater inflater;
+    // The start and end of the intergral
     String startIn,endIn;
+    // Music service
     Intent musicService;
+    // Codes for intents
     public final static int REQUEST_CODE_SAVES = 1;
     public final static int REQUEST_CAMERA = 2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // Get graph
         gp = (GraphView) findViewById(R.id.GraphView);
+        // Get function
         functionEdit = (TextInputEditText) findViewById(R.id.txtFunc);
+        // Add listner to check if the text changed
         functionEdit.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override
+            public void afterTextChanged(Editable editable) { }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -58,25 +70,20 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
                 if(function.length() != 0 && MathUtility.isValidateFunction(function))
                     renderFunc(function);
             }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
         });
 
+        // Initalize menu
         popup = new PopupMenu(this, findViewById(R.id.btnMenu));
         popup.setOnMenuItemClickListener(this);
         inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.menu, popup.getMenu());
 
+        // Get range of intergral
         startEdit = findViewById(R.id.txtStartIn);
         endEdit = findViewById(R.id.txtEndIn);
         startEdit.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -85,28 +92,22 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             }
 
             @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
+            public void afterTextChanged(Editable editable) { }
         });
         endEdit.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override
+            public void afterTextChanged(Editable editable) {}
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 endIn = charSequence.toString();
                 updateIntegral();
             }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
         });
 
+        // Get result field
         result = findViewById(R.id.txtViewRes);
 
         // Keep phone from sleep
@@ -116,8 +117,9 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     //TODO add function transforming and showing.
 
 
+    // Render the function
     public void renderFunc(String function) {
-        String f = function.toString();
+        String f = function.toLowerCase();
         gp.updateFunc(f);
         gp.refresh();
         updateIntegral();
@@ -142,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         return super.dispatchTouchEvent( event );
     }
 
-
+    // Lunch activty for getting function from database
     public void getFunctionFromDatabase()
     {
         Intent i = new Intent(this, Saves.class);
@@ -150,6 +152,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     }
 
 
+    // When we get back to activity with info
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -167,6 +170,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         }
     }
 
+    // Update result of intergral
     private void updateIntegral()
     {
         if(!MathUtility.isValidateIntegralRange(startIn,endIn))
@@ -176,10 +180,12 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         result.setText(String.valueOf(i.simpson(start, end)));
     }
 
+    // Show menu
     public void showPopupMenu(View view) {
         popup.show();
     }
 
+    // When we click on item in the menu
     @Override
     public boolean onMenuItemClick(@org.jetbrains.annotations.NotNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {

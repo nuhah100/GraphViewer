@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 
 public class Derivative extends Function {
 
+    // Initalize function
     @SuppressLint("DefaultLocale")
     public Derivative(String fx) {
         super(
@@ -20,6 +21,7 @@ public class Derivative extends Function {
         ));
     }
 
+    // Update function
     @Override
     public void updateFunction(String fx) {
         @SuppressLint("DefaultLocale")
