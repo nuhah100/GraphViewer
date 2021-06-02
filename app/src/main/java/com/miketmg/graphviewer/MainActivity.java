@@ -186,14 +186,26 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             case R.id.saves_menu:
                 getFunctionFromDatabase();
                 return true;
-            case R.id.music:
+            case R.id.music: {
                 musicService = new Intent(this, MusicService.class);
                 startService(musicService);
                 return true;
-            case R.id.qr_code:
+            }
+            case R.id.qr_code: {
                 Intent i = new Intent(this, QrScanner.class);
                 startActivityForResult(i, REQUEST_CAMERA);
                 return true;
+            }
+            case R.id.about: {
+                Intent i = new Intent(this, About.class);
+                startActivity(i);
+                return true;
+            }
+            case R.id.instructions: {
+                Intent i = new Intent(this, Instructions.class);
+                startActivity(i);
+                return true;
+            }
             default:
                 return super.onOptionsItemSelected(menuItem);
         }

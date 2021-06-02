@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">GraphViewer</string>
+    <string name="about">
+        This app was made by Moshe Kav, as part of school project for the Bagrut.
+    </string>
+    <string name="instructions">
+        Enter your function in the field that says "function", then it will automatedly draw to the board.\n
+        You can use your fingers to touch the screen and move the function for more inspection.\n
+        If you want to calculate integral, just enter the start and end positions in the fields "start" and "end", and the result
+        will show automatically on the right.\n
+        On the menu top left corner, you have 4 options:\n
+        1. Saves, you can add functions and store them in memory, and get them later.\n
+        2. Music, by clicking it the music will start play in loops.\n
+        3. Qr Code Scanner, by allowing the app to use the camera, you can scan QR codes of function.\n
+        4. About, contain info about me.\n
+        5. Instruction, this page, that explain how to use the app.\n
+    </string>
 </resources>
