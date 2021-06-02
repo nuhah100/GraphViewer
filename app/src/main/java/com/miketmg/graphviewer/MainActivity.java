@@ -10,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.PopupMenu;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     String startIn,endIn;
     Intent musicService;
     public final static int REQUEST_CODE_SAVES = 1;
+    public final static int REQUEST_CAMERA = 2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,6 +109,8 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
 
         result = findViewById(R.id.txtViewRes);
 
+        // Keep phone from sleep
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     //TODO add function transforming and showing.
@@ -150,14 +154,16 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
-            case REQUEST_CODE_SAVES:
+            case REQUEST_CODE_SAVES: case REQUEST_CAMERA: {
                 Bundle extra = data.getExtras();
-                if(extra == null)
+                if (extra == null)
                     return;
                 String function = extra.getString("Function");
                 gp.updateFunc(function);
                 gp.refresh();
+                functionEdit.setText(function);
                 break;
+            }
         }
     }
 
@@ -175,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     }
 
     @Override
-    public boolean onMenuItemClick(MenuItem menuItem) {
+    public boolean onMenuItemClick(@org.jetbrains.annotations.NotNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.saves_menu:
                 getFunctionFromDatabase();
@@ -183,6 +189,10 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             case R.id.music:
                 musicService = new Intent(this, MusicService.class);
                 startService(musicService);
+                return true;
+            case R.id.qr_code:
+                Intent i = new Intent(this, QrScanner.class);
+                startActivityForResult(i, REQUEST_CAMERA);
                 return true;
             default:
                 return super.onOptionsItemSelected(menuItem);

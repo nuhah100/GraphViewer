@@ -14,6 +14,8 @@ public class Function {
     public static double DivA = 0.000001;
     protected HashMap<Double, Double> Cache;
 
+
+
     public Function(String fx)
     {
         Fx = fx;
@@ -24,6 +26,11 @@ public class Function {
         Calc = new ExpressionBuilder(Fx)
                 .variable("x")
                 .build();
+
+        Expression Calc2 = new ExpressionBuilder("log(x)")
+            .variable("x")
+            .build();
+
     }
 
     public double calculate(double x)
@@ -66,4 +73,21 @@ public class Function {
         }
     }
 
+    private void calculateBoundaries()
+    {
+        Expression Cal = new ExpressionBuilder(Fx)
+                .variable("x")
+                .build();
+        for (double x = -Double.MAX_VALUE; x < Double.MAX_VALUE; x += Double.MIN_VALUE)
+        {
+            Cal.setVariable("x", x);
+            try {
+                Cal.evaluate();
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+    }
 }

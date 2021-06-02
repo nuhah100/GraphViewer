@@ -9,6 +9,7 @@ public final class MathUtility {
         return Math.abs(x) / x;
     }
 
+
     public static int Sign(double x)
     {
         return Sign((int) x);
